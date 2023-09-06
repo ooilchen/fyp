@@ -41,21 +41,22 @@
                             </div>
                             <form class="user" method="post">
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" id="username" name="username"
-                                        placeholder="Username" onkeyup="check_username()"> 
+                                    <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Username" onkeyup="check_username()">
+                                    <span id="username-availability"></span> 
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="userEmail" name="userEmail"
-                                        placeholder="Email Address" onkeyup="check_email()">
+                                    <input type="email" class="form-control form-control-user" id="adminEmail" name="adminEmail" placeholder="Email Address" onkeyup="check_email()">
+                                    <span id="email-availability"></span> 
                                 </div>
                                 <div class="form-group">
                                    
                                         <input type="password" class="form-control form-control-user"
-                                            id="userInputPassword" name="userInputPassword" placeholder="Password">
+                                            id="adminInputPassword" name="adminInputPassword" placeholder="Password">
                                 </div>
                                     <div class="form-group">
                                         <input type="password" class="form-control form-control-user"
-                                            id="userRepeatPassword" name="userRepeatPassword" placeholder="Repeat Password">
+                                            id="userRepeatPassword" name="userRepeatPassword" placeholder="Repeat Password" onkeyup="check_password()">
+                                        <span id="pw_match"></span>     
                                     </div>
                                     <button type='submit' class="btn btn-primary btn-user btn-block" name="signUp">
                                 
@@ -85,11 +86,11 @@
         if($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $username = $_POST["username"];
-            $email = $_POST["userEmail"];
-            $pw = $_POST["userInputPassword"];
-            $user_id = uniqid();
+            $email = $_POST["adminEmail"];
+            $pw = $_POST["adminInputPassword"];
+            $admin_id = uniqid();
 
-            $sql = "INSERT INTO `user`(`user_id`, `username`, `email`, `password`, `signup_date`) VALUES ('$user_id','$username','$email','$pw', current_timestamp())";
+            $sql = "INSERT INTO `admin`(`admin_id`, `admin_username`, `email`, `password`) VALUES ('$admin_id','$username','$email','$pw')";
 
             $result = $conn->query($sql);
 
@@ -109,10 +110,99 @@
 
 <script>
 
-    //
+    //Check if there are existing username
     function check_username(){
+        var username = document.getElementById("username").value;
+        var usernameAvailable =  document.getElementById("username-availability");
+
+        // Check if the username field is empty
+        if (username === "") {
+            usernameAvailable.innerHTML = "";
+            return;
+        }
+
+        // Define the URL for the AJAX request
+        var url = "check_username.php";
+
+        // Define the data to send in the request
+        var data = new FormData();
+        data.append("username", username);
+
+        // Configure the fetch request
+        fetch(url, {
+            method: "POST",
+            body: data,
+        })
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function (responseText) {
+                // Update the username availability message
+                usernameAvailable.innerHTML = responseText;
+            })
+            .catch(function (error) {
+                console.error("Error:", error);
+            });
 
     }
+
+    //Check if there are existing email
+    function check_email(){
+        var email = document.getElementById("adminEmail").value; 
+        var emailAvailabilityElement = document.getElementById("email-availability");
+
+        // Check if the email field is empty or not a valid email address
+        if (email === "" || !validateEmail(email)) {
+            emailAvailabilityElement.innerHTML = "";
+            return;
+        }
+
+        // Define the URL for the AJAX request
+        var url = "check_email.php";
+
+        // Define the data to send in the request
+        var data = new FormData();
+        data.append("email", email);
+
+        // Configure the fetch request
+        fetch(url, {
+            method: "POST",
+            body: data,
+        })
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function (responseText) {
+                // Update the email availability message
+                emailAvailabilityElement.innerHTML = responseText;
+            })
+            .catch(function (error) {
+                console.error("Error:", error);
+            });
+    }
+
+    // Function to validate email address format
+    function validateEmail(email) {
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function check_password() {
+        var password1 = document.getElementById("adminInputPassword").value;
+        var password2 = document.getElementById("userRepeatPassword").value;
+        var pwMatchMessage = document.getElementById("pw_match");
+
+        if (password1 === password2) {
+            pwMatchMessage.innerHTML = "Passwords match!";
+            pwMatchMessage.style.color = "green";
+        } else {
+            pwMatchMessage.innerHTML = "Passwords do not match!";
+            pwMatchMessage.style.color = "red";
+        }
+    }
+
+
+    
 </script> 
 
 </body>

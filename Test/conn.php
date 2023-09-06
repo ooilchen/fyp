@@ -1,19 +1,8 @@
+
 <?php
 
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
 
-	$database = "fyp";
+$conn = mysqli_connect("localhost","root","","fyp") or die ("error" . mysqli_error($con));
 
-	// Create a connection
-	$conn = mysqli_connect($servername,
-		$username, $password, $database);
 
-	if($conn) {
-		echo "success";
-	}
-	else {
-		die("Error". mysqli_connect_error());
-	}
 ?>
