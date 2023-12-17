@@ -1,0 +1,14 @@
+[
+  {
+    "color": "white",
+    "type": "rat",
+    "size": "large",
+    "name": "Jerry"
+  },
+  {
+    "color": "lightbrown",
+    "type": "cat",
+    "size": "nano",
+    "name": "Alfie"
+  }
+]
