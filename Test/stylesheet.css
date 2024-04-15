@@ -5,3 +5,9 @@
 .modal-xl{
     max-width: 700px;
 }
+
+.carousel-inner{
+    max-height: 500px;
+    object-fit: cover;
+}
+
