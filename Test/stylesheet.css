@@ -11,3 +11,19 @@
     object-fit: cover;
 }
 
+.card{
+    width: 20rem;
+}
+
+.navbar-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensure it's above other content */
+    width: 100%; /* Ensure it spans the entire width of the viewport */
+    background-color: white; /* Adjust to match your design */
+    border-bottom: 1px solid #ddd; /* Optional: add a border for separation */
+}
+
+.navbar {
+    padding: 10px 0; /* Adjust padding as needed */
+}
