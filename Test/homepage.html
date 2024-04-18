@@ -24,6 +24,7 @@
                 <img src="../images/FB_IMG_1691993414822.jpg" width="30" height="30" class="d-inline-block align-top" alt="logo">
                 UC
                 <span class="sr-only">(current)</span>
+                Home
             </a>
             <a class="nav-item nav-link" href="#">Confession</a>
             <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#newPost">Add Confession</a>
@@ -41,7 +42,7 @@
             <img class="d-block w-100" src="../images/img-1633387746807736819c57a937810ea00ec4fddbee14b.jpg" alt="First slide">
           </div>
           <div class="carousel-item">
-            <img class="d-block w-100" src="../images/images/IMG_20230214_191131.jpg" alt="Second slide">
+            <img class="d-block w-100" src="../images/IMG_20230214_191131.jpg" alt="Second slide">
           </div>
           <div class="carousel-item">
             <img class="d-block w-100" src="../images/nct-doyoung-31.jpeg" alt="Third slide">
@@ -74,7 +75,7 @@
     <!--Add confession modal-->
     <div class="modal" tabindex="-1" role="dialog" id="newPost">
         <div class="modal-dialog modal-xl" role="document">
-            <form method = 'POST' enctype='multipart/form-data' action="addConfession.php">
+            <form method = 'POST' enctype='multipart/form-data' action="test_addConfession.php">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Write your confession</h5>
@@ -92,7 +93,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="image">Upload Image</label>
                         <div class="input-group">
-                            <input type="file" class="form-control" id="image" name="image" multiple>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*" multiple>
                         </div>
                     </div>
                     <div class="col-md-12 mb-3">
@@ -106,9 +107,8 @@
                     
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="new_confess" class="btn btn-primary">Submit</button>
                 </div>
-                <div id="successMessage"></div>
                 </div>
             </form>
         </div>
@@ -151,29 +151,58 @@
     <script>
 
     // post confession
-    $(document).ready(function () {
-        $('#newPost').submit(function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: 'addConfession.php',
-                data: new FormData(this),
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function (response) {
-                    response = JSON.parse(response);
-                    if (response.success) {
-                        $('#successMessage').html(
-                            "<div class='alert alert-success' role='alert'>" +
-                            "This is a success alert with <a href='#' class='alert-link'>an example link</a>. Give it a click if you like." +
-                            "</div>"
-                        );
-                    }
-                }
-            });
+    $(document).ready(function() {
+        $('#new_confess').click(function() {
+            // Get the value from the input field
+            var newText = $('#newText').val();
+            var newImg = $('image').files[0];
+
+
+            var formData = new FormData();
+
+            formData.append('image', newImg);
+
+            console.log(formData);
+            // $.ajax({
+            //     url: 'addConfession.php', 
+            //     type: 'POST', 
+            //     data: { value: inputValue }, // Data to send to the server
+            //     success: function(response) {
+            //         // Handle the response from the server
+            //         console.log(response);
+            //         // Optionally, update the UI based on the response
+            //     },
+            //     error: function(xhr, status, error) {
+            //         console.error(xhr.responseText);
+            //         // Handle error
+            //     }
+            // });
         });
     });
+
+    // $(document).ready(function () {
+    //     $('#newPost').submit(function (e) {
+    //         e.preventDefault();
+    //         $.ajax({
+    //             type: 'POST',
+    //             url: 'addConfession.php',
+    //             data: new FormData(this),
+    //             contentType: false,
+    //             cache: false,
+    //             processData: false,
+    //             success: function (response) {
+    //                 response = JSON.parse(response);
+    //                 if (response.success) {
+    //                     $('#successMessage').html(
+    //                         "<div class='alert alert-success' role='alert'>" +
+    //                         "This is a success alert with <a href='#' class='alert-link'>an example link</a>. Give it a click if you like." +
+    //                         "</div>"
+    //                     );
+    //                 }
+    //             }
+    //         });
+    //     });
+    // });
     
     // fetch image for carousel
     // fetch('home_images.php')
@@ -209,10 +238,9 @@
             success: function(data) {
                 // Clear previous options
                 $('#category').empty();
-                
+
                 // Append new options
                 $.each(data, function(index, category) {
-                    console.log(category.cat_id);
                     $('#category').append('<option value="' + category.cat_id + '">' + category.cat_name + '</option>');
                 });
             },
