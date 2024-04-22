@@ -16,6 +16,7 @@
 
         <title>UC - Home</title>
 </head>
+
 <body>
     <!--Top nav-->
     <div class="navbar-wrapper">
