@@ -478,9 +478,13 @@
                     if (xhr.status === 200) {
                         // Handle successful response from PHP script
                         console.log(xhr.responseText);
+                        alert("New category is added!");
+                        location.reload();
+                        
                     } else {
                         // Handle error
                         console.error('Request failed. Status: ' + xhr.status);
+                        alert("Please try again later.")
                     }
                 };
                 xhr.onerror = function() {
