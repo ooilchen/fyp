@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Dashboard - Category</title>
+    <title>Dashboard - Home Content</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
@@ -20,87 +20,8 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <?php include 'sidebar.php'; ?>
 
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-laugh-wink"></i>
-            </div>
-            <div class="sidebar-brand-text mx-3">UC Admin </div>
-        </a>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-home"></i>
-                <span>Dashboard</span></a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Create and Manage
-        </div>
-
-        <!-- Nav Item -  -->
-        <li class="nav-item">
-            <a class="nav-link" href="Category.html">
-                <i class="fas fa-fw fa-hashtag"></i>                
-                <span>Confession Category</span></a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="Home_Content.html">
-                <i class="fas fa-fw fa-bullhorn"></i>                
-                <span>Homepage content</span></a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Confession Submission
-        </div>
-
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="pending.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Pending</span></a>
-        </li>
-
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Approved</span></a>
-        </li>
-
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Posted</span></a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
-
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-
-        </ul>
-        <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -316,18 +237,17 @@
                         <div class="container-fluid">
         
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">Confession Category</h1>
-                                
+                                <h1 class="h3 mb-0 text-gray-800">Homepage Content</h1>
                             </div>
         
                             <!-- Content Row -->
 
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Categories</h6>
-                                        <div class="col-2 ml-auto text-right">
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newCategory" id="newCat">Create New</button>
-                                        </div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Announcement by Admin</h6>
+                                    <div class="col-2 ml-auto text-right">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAnnounce" id="newsbyadmin">Create New</button>
+                                    </div>
                                 </div>
                                 
                                 <div class="card-body">
@@ -335,9 +255,36 @@
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>Category ID</th>
-                                                    <th>Name</th>
-                                                    <th>Description</th>
+                                                    <th>ID</th>
+                                                    <th>Content</th>
+                                                    <th>Image</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Carousel Image(Banner)</h6>
+                                    <div class="col-2 ml-auto text-right">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newHomeImg" id="carouselimg">Upload New Image</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Image</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -373,13 +320,13 @@
         </div>
         <!-- End of Content Wrapper -->
 
-        <!--Create Category modal-->
-        <div class="modal fade" id="newCategory" tabindex="-1" role="dialog" aria-labelledby="newCategoryLabel" aria-hidden="true">
+        <!--Create announcement by admin modal-->
+        <div class="modal fade" id="newAnnounce" tabindex="-1" role="dialog" aria-labelledby="newsByAdminLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <!-- <form method = 'POST' enctype='multipart/form-data' action=".php"> -->
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Create New Category</h5>
+                        <h5 class="modal-title">Create New Announcement</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -387,15 +334,15 @@
                     <div class="modal-body">
                         <!-- Modal content goes here -->
                         <div class="col-md-12 mb-3">
-                            <label>Category title</label>
+                            <label>Announcement</label>
                             <div class="input-group">
                                 <textarea class="form-control" name="cat_name" id="cat_name" ></textarea>
                             </div>`
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label>Description</label>
+                            <label>Upload image(Optional)</label>
                             <div class="input-group">
-                                <textarea class="form-control" name="catDesc" id="catDesc" ></textarea>
+                                <input type="file" class="form-control" id="admin_image" name="admin_image" accept="image/*" >
                             </div>
                         </div>
                     </div>
@@ -411,6 +358,38 @@
             </div>
         </div>   
         <!--End of modal-->
+
+        <!--Upload carousel image -->
+        <div class="modal fade" id="newHomeImg" tabindex="-1" role="dialog" aria-labelledby="homepageImgLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <!-- <form method = 'POST' enctype='multipart/form-data' action=".php"> -->
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Carousel image</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12 mb-3">
+                            <label>Upload image</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="admin_image" name="admin_image" accept="image/*" >
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="alertContainer" ></div>    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" onclick="validateCat()">Submit</button>
+                    </div>
+                    
+                    </div>
+                <!-- </form> -->
+            </div>
+        </div>   
+        <!--End of upload image-->       
 
         
 
@@ -429,96 +408,96 @@
 
     <script>
 
-    function validateCat() {
+//     function validateCat() {
 
-        var newCat = document.getElementById("cat_name").value; 
-        var catDesc = document.getElementById("catDesc").value;
-        var alertContainer = document.getElementById("alertContainer");
+//         var newCat = document.getElementById("cat_name").value; 
+//         var catDesc = document.getElementById("catDesc").value;
+//         var alertContainer = document.getElementById("alertContainer");
 
-        if (newCat.trim() === '' || catDesc.trim() === '') {
-            var alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-danger";
-            alertDiv.setAttribute("role", "alert");
-            alertDiv.innerHTML = `
-                Please fill in all fields
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            `;
-            // Clear any previous alerts
-            while (alertContainer.firstChild) {
-                alertContainer.removeChild(alertContainer.firstChild);
-            }
+//         if (newCat.trim() === '' || catDesc.trim() === '') {
+//             var alertDiv = document.createElement("div");
+//             alertDiv.className = "alert alert-danger";
+//             alertDiv.setAttribute("role", "alert");
+//             alertDiv.innerHTML = `
+//                 Please fill in all fields
+//                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+//                     <span aria-hidden="true">&times;</span>
+//                 </button>
+//             `;
+//             // Clear any previous alerts
+//             while (alertContainer.firstChild) {
+//                 alertContainer.removeChild(alertContainer.firstChild);
+//             }
 
-            // Append the new alert
-            alertContainer.appendChild(alertDiv);
+//             // Append the new alert
+//             alertContainer.appendChild(alertDiv);
 
-            return false; // Prevent form submission
-        }
+//             return false; // Prevent form submission
+//         }
 
-        // Clear any previous alerts
-        while (alertContainer.firstChild) {
-            alertContainer.removeChild(alertContainer.firstChild);
-        }
+//         // Clear any previous alerts
+//         while (alertContainer.firstChild) {
+//             alertContainer.removeChild(alertContainer.firstChild);
+//         }
 
-        var formData = new FormData();
-        formData.append('newCat', newCat);
-        formData.append('catDesc', catDesc); 
-        var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'new_cat.php', true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // Handle successful response from PHP script
-                        console.log(xhr.responseText);
-                        alert("New category is added!");
-                        location.reload();
+//         var formData = new FormData();
+//         formData.append('newCat', newCat);
+//         formData.append('catDesc', catDesc); 
+//         var xhr = new XMLHttpRequest();
+//                 xhr.open('POST', 'new_cat.php', true);
+//                 xhr.onload = function() {
+//                     if (xhr.status === 200) {
+//                         // Handle successful response from PHP script
+//                         console.log(xhr.responseText);
+//                         alert("New category is added!");
+//                         location.reload();
                         
-                    } else {
-                        // Handle error
-                        console.error('Request failed. Status: ' + xhr.status);
-                        alert("Please try again later.")
-                    }
-                };
-                xhr.onerror = function() {
-                    // Handle network error
-                    console.error('Request failed. Network error.');
-                };
-                xhr.send(formData);
+//                     } else {
+//                         // Handle error
+//                         console.error('Request failed. Status: ' + xhr.status);
+//                         alert("Please try again later.")
+//                     }
+//                 };
+//                 xhr.onerror = function() {
+//                     // Handle network error
+//                     console.error('Request failed. Network error.');
+//                 };
+//                 xhr.send(formData);
             
 
-        return true; // Allow form submission
-    }
+//         return true; // Allow form submission
+//     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-    var tableBody = document.querySelector("#dataTable tbody");
+//     document.addEventListener("DOMContentLoaded", function() {
+//     var tableBody = document.querySelector("#dataTable tbody");
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'fetch_categories.php', true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var categories = JSON.parse(xhr.responseText);
-            populateTable(categories);
-        } else {
-            console.error('Request failed. Status: ' + xhr.status);
-        }
-    };
-    xhr.onerror = function() {
-        console.error('Request failed. Network error.');
-    };
-    xhr.send();
+//     var xhr = new XMLHttpRequest();
+//     xhr.open('GET', 'fetch_categories.php', true);
+//     xhr.onload = function() {
+//         if (xhr.status === 200) {
+//             var categories = JSON.parse(xhr.responseText);
+//             populateTable(categories);
+//         } else {
+//             console.error('Request failed. Status: ' + xhr.status);
+//         }
+//     };
+//     xhr.onerror = function() {
+//         console.error('Request failed. Network error.');
+//     };
+//     xhr.send();
 
-    function populateTable(categories) {
-        categories.forEach(function(category) {
-            var row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${category.category_id}</td>
-                <td>${category.category_name}</td>
-                <td>${category.category_desc}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
-});
+//     function populateTable(categories) {
+//         categories.forEach(function(category) {
+//             var row = document.createElement("tr");
+//             row.innerHTML = `
+//                 <td>${category.category_id}</td>
+//                 <td>${category.category_name}</td>
+//                 <td>${category.category_desc}</td>
+//             `;
+//             tableBody.appendChild(row);
+//         });
+//     }
+// });
 
 
     </script>
