@@ -331,7 +331,7 @@
                                                         echo "<td><button class='btn btn-danger' onclick='deleteImage(\"" . $row["image_id"] . "\")'>Delete</button></td>";
                                                     }
                                                 } else {
-                                                    echo "<tr><td colspan='4'>No announcements found. </td></tr>";
+                                                    echo "<tr><td colspan='4'>No image found. </td></tr>";
                                                 }
 
                                                 $conn->close();

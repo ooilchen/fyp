@@ -258,6 +258,7 @@
                                                     <th>Category ID</th>
                                                     <th>Name</th>
                                                     <th>Description</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -277,6 +278,7 @@
                                                         echo "<td>" . $row["category_id"] . "</td>";
                                                         echo "<td>" . $row["category_name"] . "</td>";
                                                         echo "<td>" . $row["category_desc"] . "</td>";
+                                                        echo "<td><button class='btn btn-danger' onclick='deleteCat(\"" . $row["category_id"] . "\")'>Delete</button></td>";
                                                         echo "</tr>";
                                                     }
                                                 } else {
@@ -411,7 +413,7 @@
         formData.append('newCat', newCat);
         formData.append('catDesc', catDesc); 
         var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'new_cat.php', true);
+                xhr.open('POST', 'category_add.php', true);
                 xhr.onload = function() {
                     if (xhr.status === 200) {
                         // Handle successful response from PHP script
@@ -435,7 +437,32 @@
         return true; // Allow form submission
     }
 
-
+    function deleteCat(cat_id) {
+        if (confirm("Are you sure you want to delete this category?")) {
+            // Call a PHP script to delete the image
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'delete_cat.php', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Handle successful response from PHP script
+                    console.log(xhr.responseText);
+                    alert("Category deleted successfully!");
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    // Handle error
+                    console.error('Request failed. Status: ' + xhr.status);
+                    alert("Failed to delete category. Please try again later.");
+                }
+            };
+            xhr.onerror = function() {
+                // Handle network error
+                console.error('Request failed. Network error.');
+            };
+            // Send the image_id to the PHP script for deletion
+            xhr.send('cat_id=' + cat_id);
+        }
+    }
 
     </script>
       

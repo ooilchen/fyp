@@ -263,6 +263,35 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php
+
+                                                    include 'conn.php';
+
+                                                    $sql = "SELECT `content_id`, `date_created`, `category_id`, `content`, `content_status`, `image` FROM `content` WHERE `content_status` = '0'";
+
+
+                                                    $result = $conn->query($sql);
+    
+                                                    // Check if any rows were returned
+                                                    if ($result->num_rows > 0) {
+                                                        // Output data into the HTML table
+                                                        while ($row = $result->fetch_assoc()) {
+                                                            echo "<tr>";
+                                                            echo "<td>" . $row["content_id"] . "</td>";
+                                                            echo "<td>" . $row["category_id"] . "</td>";
+                                                            echo "<td>" . $row["content"] . "</td>";
+                                                            echo "<td><a href='" . $row["image"] . "' target='_blank'>" . $row["image"] . "</a></td>";
+                                                            echo "<td>" . $row["date_created"] . "</td>";
+                                                            echo "<td>" . $row["date_created"] . "</td>";
+                                                            echo "</tr>";
+                                                        }
+                                                    } else {
+                                                        echo "<tr><td colspan='3'>No confession for now</td></tr>";
+                                                    }
+    
+                                                    // Close connection
+                                                    $conn->close();
+                                                ?>
 
                                             </tbody>
                                         </table>
