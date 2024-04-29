@@ -259,7 +259,7 @@
                                                     <th>Content</th>
                                                     <th>Image</th>
                                                     <th>Date</th>
-                                                    <th>checkbox</th>
+                                                    <th>Checkbox</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

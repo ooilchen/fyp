@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Dashboard - Home Content</title>
+    <title>Dashboard - Pending</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
@@ -21,7 +21,6 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
     <?php include 'sidebar.php'; ?>
-
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -237,112 +236,38 @@
                         <div class="container-fluid">
         
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">Homepage Content</h1>
+                                <h1 class="h3 mb-0 text-gray-800">Confession - All</h1>
+                                
                             </div>
         
                             <!-- Content Row -->
 
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Announcement by Admin</h6>
-                                    <div class="col-2 ml-auto text-right">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAnnounce" id="newsbyadmin">Create New</button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Announcement by Admin -->
+                                <!-- <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary"></h6>
+                                        <div class="col-2 ml-auto text-right">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newCategory" id="newCat">Create New</button>
+                                        </div>
+                                </div> -->
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>ID</th>
+                                                    <th>Content ID</th>
+                                                    <th>Category</th>
                                                     <th>Content</th>
                                                     <th>Image</th>
                                                     <th>Date</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            <?php 
-                                                include 'conn.php';
-
-                                                // Retrieve announcement data from the database
-                                                $sql = "SELECT * FROM admin_annnouncement";
-                                                $result = $conn->query($sql);
-
-                                                if ($result->num_rows > 0) {
-                                                    // Output data of each row
-                                                    while($row = $result->fetch_assoc()) {
-                                                        echo "<tr>";
-                                                        echo "<td>" . $row["announce_id"] . "</td>";
-                                                        echo "<td>" . $row["announcement"] . "</td>";
-                                                        echo "<td><img src='" . $row["announcement_img"] . "' width='100'></td>";
-                                                        echo "<td>" . $row["date_announce"] . "</td>";
-                                                        echo "<td>" . $row["date_announce"] . "</td>";
-                                                        echo "</tr>";
-                                                    }
-                                                } else {
-                                                    echo "<tr><td colspan='4'>No announcements found. </td></tr>";
-                                                }
-
-                                                $conn->close();
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End of announcement by admin -->
-
-                            <!-- Carousel Image -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Carousel Image(Banner)</h6>
-                                    <div class="col-2 ml-auto text-right">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newHomeImg" id="carouselimg">Upload New Image</button>
-                                    </div>
-                                </div>
-                                
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Image</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php 
-                                                include 'conn.php';
-
-                                                // Retrieve announcement data from the database
-                                                $sql = "SELECT * FROM home_image";
-                                                $result = $conn->query($sql);
-
-                                                if ($result->num_rows > 0) {
-                                                    // Output data of each row
-                                                    while($row = $result->fetch_assoc()) {
-                                                        echo "<tr>";
-                                                        echo "<td>" . $row["image_id"] . "</td>";
-                                                        echo "<td><img src='" . $row["image_path"] . "' width='100'></td>";
-                                                        echo "<td><button class='btn btn-danger' onclick='deleteImage(\"" . $row["image_id"] . "\")'>Delete</button></td>";
-                                                    }
-                                                } else {
-                                                    echo "<tr><td colspan='4'>No announcements found. </td></tr>";
-                                                }
-
-                                                $conn->close();
-                                                ?>
 
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            <!-- End of carousel image -->
         
                             <!-- Content Row -->
 
@@ -369,77 +294,6 @@
         </div>
         <!-- End of Content Wrapper -->
 
-        <!--Create announcement by admin modal-->
-        <div class="modal fade" id="newAnnounce" tabindex="-1" role="dialog" aria-labelledby="newsByAdminLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <!-- <form method = 'POST' enctype='multipart/form-data' action=".php"> -->
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Create New Announcement</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Modal content goes here -->
-                        <div class="col-md-12 mb-3">
-                            <label>Announcement</label>
-                            <div class="input-group">
-                                <textarea class="form-control" name="announcement" id="announcement" ></textarea>
-                            </div>`
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label>Upload image(Optional)</label>
-                            <div class="input-group">
-                                <input type="file" class="form-control" id="admin_image" name="admin_image" accept="image/*" >
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="alertContainer" ></div>    
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="validateContent()">Submit</button>
-                    </div>
-                    
-                    </div>
-                <!-- </form> -->
-            </div>
-        </div>   
-        <!--End of modal-->
-
-        <!--Upload carousel image -->
-        <div class="modal fade" id="newHomeImg" tabindex="-1" role="dialog" aria-labelledby="homepageImgLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <!-- <form method = 'POST' enctype='multipart/form-data' action=".php"> -->
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Carousel image</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-md-12 mb-3">
-                            <label>Upload image</label>
-                            <div class="input-group">
-                                <input type="file" class="form-control" id="carousel_image" name="carousel_image" accept="image/*" >
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="errorContainer" ></div>    
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="validateImg()">Submit</button>
-                    </div>
-                    
-                    </div>
-                <!-- </form> -->
-            </div>
-        </div>   
-        <!--End of upload image-->       
-
         
 
     </div>
@@ -456,160 +310,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-
-    // Validate announcement, not empty
-    function validateContent() {
-
-        var newAnnounce = document.getElementById("announcement").value; 
-        var alertContainer = document.getElementById("alertContainer");
-
-        if (newAnnounce.trim() === '' ) {
-            var alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-danger";
-            alertDiv.setAttribute("role", "alert");
-            alertDiv.innerHTML = `
-                Please fill in all fields
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            `;
-            // Clear any previous alerts
-            while (alertContainer.firstChild) {
-                alertContainer.removeChild(alertContainer.firstChild);
-            }
-
-            // Append the new alert
-            alertContainer.appendChild(alertDiv);
-
-            return false; // Prevent form submission
-        }
-
-        // Clear any previous alerts
-        while (alertContainer.firstChild) {
-            alertContainer.removeChild(alertContainer.firstChild);
-        }
-
-        var formData = new FormData();
-        formData.append('newAnnounce', newAnnounce);
-        
-        // Get the file input element
-        var fileInput = document.getElementById('admin_image');
-        // Check if a file is selected
-        if (fileInput.files.length > 0) {
-            // Append the file to FormData
-            formData.append('admin_image', fileInput.files[0]);
-        }
-
-        var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'home_add_announce.php', true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // Handle successful response from PHP script
-                        console.log(xhr.responseText);
-                        alert("Announcement is added!");
-                        location.reload();
-                        
-                    } else {
-                        // Handle error
-                        console.error('Request failed. Status: ' + xhr.status);
-                        alert("Please try again later.")
-                    }
-                };
-                xhr.onerror = function() {
-                    // Handle network error
-                    console.error('Request failed. Network error.');
-                };
-                xhr.send(formData);
-            
-
-        return true; 
-    }
-
-    //Validate image not empty
-    function validateImg() {
-
-        var errorContainer = document.getElementById("errorContainer");
-
-        var formData = new FormData();
-
-        var fileInput = document.getElementById('carousel_image');
-
-        // Check if a file is selected
-        if (fileInput.files.length > 0) {
-            // Append the file to FormData
-            formData.append('carousel_image', fileInput.files[0]);
-        }else{
-
-            var alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-danger";
-            alertDiv.setAttribute("role", "alert");
-            alertDiv.innerHTML = `
-                Please select an image
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            `;
-            // Clear any previous alerts
-            while (errorContainer.firstChild) {
-                errorContainer.removeChild(errorContainer.firstChild);
-            }
-            // Append the new alert
-            errorContainer.appendChild(alertDiv);
-
-            return false; // Prevent form submission
-        }
-
-        var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'home_img.php', true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // Handle successful response from PHP script
-                        console.log(xhr.responseText);
-                        alert("Image saved!");
-                        location.reload();
-                        
-                    } else {
-                        // Handle error
-                        console.error('Request failed. Status: ' + xhr.status);
-                        alert("Please try again later.")
-                    }
-                };
-                xhr.onerror = function() {
-                    // Handle network error
-                    console.error('Request failed. Network error.');
-                };
-                xhr.send(formData);
-            
-
-        return true; 
-    }
-
-    function deleteImage(image_id) {
-        if (confirm("Are you sure you want to delete this image?")) {
-            // Call a PHP script to delete the image
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'delete_image.php', true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    // Handle successful response from PHP script
-                    console.log(xhr.responseText);
-                    alert("Image deleted successfully!");
-                    location.reload(); // Reload the page to reflect changes
-                } else {
-                    // Handle error
-                    console.error('Request failed. Status: ' + xhr.status);
-                    alert("Failed to delete image. Please try again later.");
-                }
-            };
-            xhr.onerror = function() {
-                // Handle network error
-                console.error('Request failed. Network error.');
-            };
-            // Send the image_id to the PHP script for deletion
-            xhr.send('image_id=' + image_id);
-        }
-    }
 
     </script>
       

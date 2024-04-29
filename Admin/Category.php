@@ -261,6 +261,32 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                            <?php
+                                                
+                                                include 'conn.php';
+
+                                                $sql = "SELECT `category_id`, `category_name`, `category_desc` FROM `category`";
+
+                                                $result = $conn->query($sql);
+
+                                                // Check if any rows were returned
+                                                if ($result->num_rows > 0) {
+                                                    // Output data into the HTML table
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        echo "<tr>";
+                                                        echo "<td>" . $row["category_id"] . "</td>";
+                                                        echo "<td>" . $row["category_name"] . "</td>";
+                                                        echo "<td>" . $row["category_desc"] . "</td>";
+                                                        echo "</tr>";
+                                                    }
+                                                } else {
+                                                    echo "<tr><td colspan='3'>No data found</td></tr>";
+                                                }
+
+                                                // Close connection
+                                                $conn->close();
+                                            ?>
+
 
                                             </tbody>
                                         </table>
@@ -409,36 +435,6 @@
         return true; // Allow form submission
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-    var tableBody = document.querySelector("#dataTable tbody");
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'fetch_categories.php', true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            var categories = JSON.parse(xhr.responseText);
-            populateTable(categories);
-        } else {
-            console.error('Request failed. Status: ' + xhr.status);
-        }
-    };
-    xhr.onerror = function() {
-        console.error('Request failed. Network error.');
-    };
-    xhr.send();
-
-    function populateTable(categories) {
-        categories.forEach(function(category) {
-            var row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${category.category_id}</td>
-                <td>${category.category_name}</td>
-                <td>${category.category_desc}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
-});
 
 
     </script>
