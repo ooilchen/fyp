@@ -14,6 +14,11 @@
     <!-- Custom fonts for this template-->
     <link href="../fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
+  
+
+
 </head>
 
 <body>
@@ -243,23 +248,25 @@
                             <!-- Content Row -->
 
                             <div class="card shadow mb-4">
-                                <!-- <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary"></h6>
-                                        <div class="col-2 ml-auto text-right">
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newCategory" id="newCat">Create New</button>
-                                        </div>
-                                </div> -->
+                                    <div class="ml-auto">
+                                        <button type="button" class="btn btn-primary" id="approveButton">Approve</button>
+                                        <button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+                                    </div>
+                                </div>
+        
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
+                                                    <th>Checkbox</th>
                                                     <th>Content ID</th>
                                                     <th>Category</th>
                                                     <th>Content</th>
                                                     <th>Image</th>
                                                     <th>Date</th>
-                                                    <th>Checkbox</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -269,7 +276,6 @@
 
                                                     $sql = "SELECT `content_id`, `date_created`, `category_id`, `content`, `content_status`, `image` FROM `content` WHERE `content_status` = '0'";
 
-
                                                     $result = $conn->query($sql);
     
                                                     // Check if any rows were returned
@@ -277,11 +283,11 @@
                                                         // Output data into the HTML table
                                                         while ($row = $result->fetch_assoc()) {
                                                             echo "<tr>";
+                                                            echo "<td><input class='form-check-input' type='checkbox' name='content_id[]' value='" . $row["content_id"] . "'></td>";
                                                             echo "<td>" . $row["content_id"] . "</td>";
                                                             echo "<td>" . $row["category_id"] . "</td>";
                                                             echo "<td>" . $row["content"] . "</td>";
                                                             echo "<td><a href='" . $row["image"] . "' target='_blank'>" . $row["image"] . "</a></td>";
-                                                            echo "<td>" . $row["date_created"] . "</td>";
                                                             echo "<td>" . $row["date_created"] . "</td>";
                                                             echo "</tr>";
                                                         }
@@ -339,7 +345,74 @@
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <!-- Datatables -->
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+
+
+
     <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
+
+        //////////// Approve button ////////////
+
+        $('#approveButton').on('click', function () {
+            var selectedIds = [];
+            $('input[name="content_id[]"]:checked').each(function () {
+                selectedIds.push($(this).val());
+            });
+            
+            $.ajax({
+            url: 'content_update.php',
+            type: 'post',
+            data: {  
+                content_ids: selectedIds 
+            },
+            success: function (response) {
+                // Handle success response
+                console.log(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle error
+                console.error(textStatus, errorThrown);
+            }
+            });
+                console.log('Selected IDs for approve:', selectedIds);
+            });
+
+        //////////// End of approve button ////////////
+
+        //////////// Delete button ////////////
+
+        $('#deleteButton').on('click', function () {
+            var selectedIds = [];
+            $('input[name="content_id[]"]:checked').each(function () {
+                selectedIds.push($(this).val());
+            });
+
+            $.ajax({
+            url: 'your_php_script.php',
+            type: 'post',
+            data: { action: 'delete', content_ids: selectedIds },
+            success: function (response) {
+                // Handle success response
+                console.log(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle error
+                console.error(textStatus, errorThrown);
+            }
+            });
+                
+                console.log('Selected IDs for delete:', selectedIds);
+            });
+
+            //////////// End of delete button ////////////
 
     </script>
       

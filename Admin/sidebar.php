@@ -50,21 +50,21 @@
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="pending.php">
+            <a class="nav-link" href="content_pending.php">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Pending</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="approved.php">
+            <a class="nav-link" href="content_approved.php">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Approved</span></a>
         </li>
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="confession.php">
+            <a class="nav-link" href="content_all.php">
                 <i class="fas fa-fw fa-table"></i>
                 <span>All</span></a>
         </li>

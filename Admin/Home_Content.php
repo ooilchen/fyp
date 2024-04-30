@@ -245,9 +245,6 @@
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3 d-flex align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Announcement by Admin</h6>
-                                    <div class="col-2 ml-auto text-right">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAnnounce" id="newsbyadmin">Create New</button>
-                                    </div>
                                 </div>
                                 
                                 <!-- Announcement by Admin -->
@@ -276,10 +273,10 @@
                                                     while($row = $result->fetch_assoc()) {
                                                         echo "<tr>";
                                                         echo "<td>" . $row["announce_id"] . "</td>";
-                                                        echo "<td>" . $row["announcement"] . "</td>";
-                                                        echo "<td><img src='" . $row["announcement_img"] . "' width='100'></td>";
+                                                        echo "<td contenteditable='true'>" . $row["announcement"] . "</td>";
+                                                        echo "<td><img src='" . $row["announcement_img"] . "' width='150'></td>";
                                                         echo "<td>" . $row["date_announce"] . "</td>";
-                                                        echo "<td>" . $row["date_announce"] . "</td>";
+                                                        echo "<td><button class='btn btn-primary' data-toggle='modal' data-target='#newAnnounce' id='newsbyadmin'>Edit</button></td>";
                                                         echo "</tr>";
                                                     }
                                                 } else {
@@ -328,7 +325,7 @@
                                                         echo "<tr>";
                                                         echo "<td>" . $row["image_id"] . "</td>";
                                                         echo "<td><img src='" . $row["image_path"] . "' width='100'></td>";
-                                                        echo "<td><button class='btn btn-danger' onclick='deleteImage(\"" . $row["image_id"] . "\")'>Delete</button></td>";
+                                                        echo "<td><button class='btn btn-danger' onclick='editAnnouncement(\"" . $row["image_id"] . "\")'>Delete</button></td>";
                                                     }
                                                 } else {
                                                     echo "<tr><td colspan='4'>No image found. </td></tr>";
@@ -458,72 +455,74 @@
     <script>
 
     // Validate announcement, not empty
-    function validateContent() {
+    // function validateContent() {
 
-        var newAnnounce = document.getElementById("announcement").value; 
-        var alertContainer = document.getElementById("alertContainer");
+    //     var newAnnounce = document.getElementById("announcement").value; 
+    //     var alertContainer = document.getElementById("alertContainer");
 
-        if (newAnnounce.trim() === '' ) {
-            var alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-danger";
-            alertDiv.setAttribute("role", "alert");
-            alertDiv.innerHTML = `
-                Please fill in all fields
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            `;
-            // Clear any previous alerts
-            while (alertContainer.firstChild) {
-                alertContainer.removeChild(alertContainer.firstChild);
-            }
+    //     if (newAnnounce.trim() === '' ) {
+    //         var alertDiv = document.createElement("div");
+    //         alertDiv.className = "alert alert-danger";
+    //         alertDiv.setAttribute("role", "alert");
+    //         alertDiv.innerHTML = `
+    //             Please fill in all fields
+    //             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    //                 <span aria-hidden="true">&times;</span>
+    //             </button>
+    //         `;
+    //         // Clear any previous alerts
+    //         while (alertContainer.firstChild) {
+    //             alertContainer.removeChild(alertContainer.firstChild);
+    //         }
 
-            // Append the new alert
-            alertContainer.appendChild(alertDiv);
+    //         // Append the new alert
+    //         alertContainer.appendChild(alertDiv);
 
-            return false; // Prevent form submission
-        }
+    //         return false; // Prevent form submission
+    //     }
 
-        // Clear any previous alerts
-        while (alertContainer.firstChild) {
-            alertContainer.removeChild(alertContainer.firstChild);
-        }
+    //     // Clear any previous alerts
+    //     while (alertContainer.firstChild) {
+    //         alertContainer.removeChild(alertContainer.firstChild);
+    //     }
 
-        var formData = new FormData();
-        formData.append('newAnnounce', newAnnounce);
+    //     var formData = new FormData();
+    //     formData.append('newAnnounce', newAnnounce);
         
-        // Get the file input element
-        var fileInput = document.getElementById('admin_image');
-        // Check if a file is selected
-        if (fileInput.files.length > 0) {
-            // Append the file to FormData
-            formData.append('admin_image', fileInput.files[0]);
-        }
+    //     // Get the file input element
+    //     var fileInput = document.getElementById('admin_image');
+    //     // Check if a file is selected
+    //     if (fileInput.files.length > 0) {
+    //         // Append the file to FormData
+    //         formData.append('admin_image', fileInput.files[0]);
+    //     }
 
-        var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'home_add_announce.php', true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // Handle successful response from PHP script
-                        console.log(xhr.responseText);
-                        alert("Announcement is added!");
-                        location.reload();
+    //     var xhr = new XMLHttpRequest();
+    //             xhr.open('POST', 'home_add_announce.php', true);
+    //             xhr.onload = function() {
+    //                 if (xhr.status === 200) {
+    //                     // Handle successful response from PHP script
+    //                     console.log(xhr.responseText);
+    //                     alert("Announcement is added!");
+    //                     location.reload();
                         
-                    } else {
-                        // Handle error
-                        console.error('Request failed. Status: ' + xhr.status);
-                        alert("Please try again later.")
-                    }
-                };
-                xhr.onerror = function() {
-                    // Handle network error
-                    console.error('Request failed. Network error.');
-                };
-                xhr.send(formData);
+    //                 } else {
+    //                     // Handle error
+    //                     console.error('Request failed. Status: ' + xhr.status);
+    //                     alert("Please try again later.")
+    //                 }
+    //             };
+    //             xhr.onerror = function() {
+    //                 // Handle network error
+    //                 console.error('Request failed. Network error.');
+    //             };
+    //             xhr.send(formData);
             
 
-        return true; 
-    }
+    //     return true; 
+    // }
+
+
 
     //Validate image not empty
     function validateImg() {

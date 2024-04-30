@@ -23,6 +23,34 @@
 
         <?php include 'sidebar.php'; ?>
 
+        <?php 
+            include 'conn.php';
+
+             // Execute SQL query to count total content
+            $sql_total = "SELECT COUNT(*) AS total_count FROM content";
+            $result_total = $conn->query($sql_total);
+
+            $total_count = 0;
+            if ($result_total->num_rows > 0) {
+                // Output data of each row
+                $row_total = $result_total->fetch_assoc();
+                $total_count = $row_total["total_count"];
+            }
+
+            // Execute SQL query to count pending confessions
+            $sql = "SELECT COUNT(*) AS count FROM content WHERE content_status = 0";
+            $result = $conn->query($sql);
+
+            $pending_count = 0;
+            if ($result->num_rows > 0) {
+                // Output data of each row
+                $row = $result->fetch_assoc();
+                $pending_count = $row["count"];
+            }
+
+            $conn->close();
+        ?>
+
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -244,40 +272,44 @@
                             <!-- Content Row -->
                             <div class="row">
         
-                                <!-- Earnings (Monthly) Card Example -->
+                                <!-- Pending confession Card  -->
                                 <div class="col-xl-3 col-md-6 mb-4">
-                                    <div class="card border-left-primary shadow h-100 py-2">
-                                        <div class="card-body">
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                        Pending confession</div>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                    <a href="pending.php" style="text-decoration: none;" >
+                                        <div class="card border-left-primary shadow h-100 py-2">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                            Pending confession</div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $pending_count; ?></div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
         
-                                <!-- Earnings (Monthly) Card Example -->
+                                <!-- Total confession Card -->
                                 <div class="col-xl-3 col-md-6 mb-4">
-                                    <div class="card border-left-success shadow h-100 py-2">
-                                        <div class="card-body">
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                        Total confession</div>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">...</div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    <a href="confession.php" style="text-decoration: none;" >
+                                        <div class="card border-left-success shadow h-100 py-2">
+                                            <div class="card-body">
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col mr-2">
+                                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                            Total confession</div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_count; ?></div>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>    
                                 </div>
         
                                 <!-- Earnings (Monthly) Card Example -->
