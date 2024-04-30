@@ -14,6 +14,9 @@
     <!-- Custom fonts for this template-->
     <link href="../fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
+
 </head>
 
 <body>
@@ -339,7 +342,17 @@
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <!-- Datatables -->
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+
     <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
 
     </script>
       

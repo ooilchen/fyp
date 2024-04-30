@@ -396,9 +396,11 @@
             });
 
             $.ajax({
-            url: 'your_php_script.php',
+            url: 'content_delete.php',
             type: 'post',
-            data: { action: 'delete', content_ids: selectedIds },
+            data: { 
+                content_ids: selectedIds 
+            },
             success: function (response) {
                 // Handle success response
                 console.log(response);
