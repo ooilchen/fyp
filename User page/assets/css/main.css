@@ -211,6 +211,15 @@ section {
   scroll-margin-top: 70px;
 }
 
+.logo {
+  text-decoration: none; 
+}
+
+.logo:hover {
+  text-decoration: none; 
+}
+
+
 /*--------------------------------------------------------------
 # Desktop Navigation 
 --------------------------------------------------------------*/
@@ -1310,5 +1319,8 @@ section {
   font-family: var(--font-primary); 
 }
 
+li a:hover {
+  text-decoration: none;
+}
 
 

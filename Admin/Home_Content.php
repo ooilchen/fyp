@@ -325,7 +325,7 @@
                                                         echo "<tr>";
                                                         echo "<td>" . $row["image_id"] . "</td>";
                                                         echo "<td><img src='" . $row["image_path"] . "' width='100'></td>";
-                                                        echo "<td><button class='btn btn-danger' onclick='editAnnouncement(\"" . $row["image_id"] . "\")'>Delete</button></td>";
+                                                        echo "<td><button class='btn btn-danger' onclick='deleteImage(\"" . $row["image_id"] . "\")'>Delete</button></td>";
                                                     }
                                                 } else {
                                                     echo "<tr><td colspan='4'>No image found. </td></tr>";
@@ -365,45 +365,6 @@
                     
         </div>
         <!-- End of Content Wrapper -->
-
-        <!--Create announcement by admin modal-->
-        <div class="modal fade" id="newAnnounce" tabindex="-1" role="dialog" aria-labelledby="newsByAdminLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <!-- <form method = 'POST' enctype='multipart/form-data' action=".php"> -->
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Create New Announcement</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Modal content goes here -->
-                        <div class="col-md-12 mb-3">
-                            <label>Announcement</label>
-                            <div class="input-group">
-                                <textarea class="form-control" name="announcement" id="announcement" ></textarea>
-                            </div>`
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label>Upload image(Optional)</label>
-                            <div class="input-group">
-                                <input type="file" class="form-control" id="admin_image" name="admin_image" accept="image/*" >
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="alertContainer" ></div>    
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="validateContent()">Submit</button>
-                    </div>
-                    
-                    </div>
-                <!-- </form> -->
-            </div>
-        </div>   
-        <!--End of modal-->
 
         <!--Upload carousel image -->
         <div class="modal fade" id="newHomeImg" tabindex="-1" role="dialog" aria-labelledby="homepageImgLabel" aria-hidden="true">

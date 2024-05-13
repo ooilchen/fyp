@@ -152,3 +152,66 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+   // Function to validate the form data
+   function validateForm() {
+
+    var newText = document.getElementById('newText').value;
+    var image = document.getElementById('image').files[0];
+    var category = document.getElementById('category').value;
+
+    var alertContainer = document.getElementById("alertContainer");
+
+    // Check if required fields are empty
+    if (newText.trim() === '' || category === '') {
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-danger";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.innerHTML = `
+            Please fill in all fields
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        `;
+
+        // Clear any previous alerts
+        while (alertContainer.firstChild) {
+            alertContainer.removeChild(alertContainer.firstChild);
+        }
+
+        // Append the new alert
+        alertContainer.appendChild(alertDiv);
+
+        return false; // Prevent form submission
+    }
+
+    // Clear any previous alerts
+    while (alertContainer.firstChild) {
+        alertContainer.removeChild(alertContainer.firstChild);
+    }
+    
+    var formData = new FormData();
+    formData.append('newText', newText);
+    formData.append('image', image); 
+    formData.append('category', category); 
+
+    var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'confession_add.php', true);
+          xhr.onload = function() {
+              if (xhr.status === 200) {
+                console.log(xhr.responseText);
+                alert("We have receive your confession. ");
+                location.reload(); 
+                    
+              } else {
+                  console.error('Request failed. Status: ' + xhr.status);
+                  alert("Please try again later.")
+              }
+          };
+          xhr.onerror = function() {
+              console.error('Request failed. Network error.');
+          };
+          xhr.send(formData);
+
+    return true;
+}
