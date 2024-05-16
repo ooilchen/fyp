@@ -6,13 +6,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $prefix = 'IMG-'; 
     $img_id = $prefix . uniqid();
-
+    
     // Check if an image was uploaded
     if (!empty($_FILES["carousel_image"]["name"])) {
 
         // File upload handling
         $targetDirectory = "../images/"; 
-        $targetFile = $targetDirectory . basename($_FILES["carousel_image"]["name"]); 
+        $fileExtension = pathinfo($_FILES["carousel_image"]["name"], PATHINFO_EXTENSION);
+        $newFileName = $img_id . '.' . $fileExtension; // Rename the file to the image ID
+        $targetFile = $targetDirectory . $newFileName; 
 
         // Check if file was uploaded successfully
         if (move_uploaded_file($_FILES["carousel_image"]["tmp_name"], $targetFile)) {
@@ -28,10 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Execute prepared statement
     if ($stmt->execute()) {
-
         echo "Image added successfully!";
     } else {
-        // Error inserting announcement
+        // Error inserting image
         echo "Error: " . $stmt->error;
     }
 

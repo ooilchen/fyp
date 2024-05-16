@@ -1324,3 +1324,36 @@ li a:hover {
 }
 
 
+/*--------------------------------------------------------------
+# Card
+--------------------------------------------------------------*/
+
+
+.content {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+}
+.content img {
+  max-width: 100%;
+  height: auto;
+}
+.content-actions {
+  margin-top: 10px;
+}
+.btn {
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+}
+.btn-like {
+  background-color: #28a745;
+  color: white;
+}
+.btn-comment {
+  background-color: #ffc107;
+  color: white;
+}

@@ -338,7 +338,7 @@
                             <label>Category title</label>
                             <div class="input-group">
                                 <textarea class="form-control" name="cat_name" id="cat_name" ></textarea>
-                            </div>`
+                            </div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label>Description</label>

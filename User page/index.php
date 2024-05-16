@@ -54,25 +54,41 @@
             <div class="col-12">
               <div class="swiper sliderFeaturedPosts">
                 <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('../images/nct-doyoung-31.jpeg');">
-                    </a>
-                  </div>
+                  <?php
+                    include 'conn.php';
 
-                  <div class="swiper-slide">
-                    <a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('../images/IMG_20230214_191131.jpg');">
-                    </a>
-                  </div>
+                    $sql = "SELECT * FROM home_image"; 
+                    $result = $conn->query($sql);
 
-                  <div class="swiper-slide">
-                    <a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('../images/img-1633387746807736819c57a937810ea00ec4fddbee14b.jpg');">
-                    </a>
-                  </div>
+                    if ($result->num_rows > 0) {
+                      // Output data of each row
+                      while ($row = $result->fetch_assoc()) {
+                        echo "<div class='swiper-slide'>";
+                        echo "<a class='img-bg d-flex align-items-end' style='background-image: url(" . $row["image_path"] . ");'></a>";
+                        echo "</div>";
+                      }
+                    } else {
+                      echo "No images found in the database.";
+                    }
 
-                  <div class="swiper-slide">
-                    <a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('../images/White Grey Minimalist Leaves Shadow Inspirational Desktop Wallpaper.png');">
-                    </a>
-                  </div>
+                    // Fetch the announcement data
+                    $sql = "SELECT `announce_id`, `announcement`, `announcement_img`, `date_announce` FROM `admin_annnouncement` WHERE 1 LIMIT 1";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        $announcement = $row['announcement'];
+                        $announcement_img = $row['announcement_img'];
+                        $date_announce = $row['date_announce'];
+                    } else {
+                        // Default values if no data is found
+                        $announcement = "No announcements found.";
+                        $announcement_img = "default.jpg"; 
+                        $date_announce = "";
+                    }
+
+                    $conn->close();
+                  ?>
                 </div>
                 <div class="custom-swiper-button-next">
                   <span class="bi-chevron-right"></span>
@@ -94,15 +110,15 @@
           <div class="row g-5">
             <div class="col-lg-4">
               <div class="post-entry-1 lg">
-                <a href="single-post.html"><img src="assets/img/post-landscape-1.jpg" alt="" class="img-fluid"></a>
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                <h2><a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
-                <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus exercitationem? Nihil tempore odit ab minus eveniet praesentium, similique blanditiis molestiae ut saepe perspiciatis officia nemo, eos quae cumque. Accusamus fugiat architecto rerum animi atque eveniet, quo, praesentium dignissimos</p>
+                <a ><img src="<?php echo htmlspecialchars($announcement_img); ?>" alt="" class="img-fluid"></a>
+                <div class="post-meta">  <span>Updated on <?php echo htmlspecialchars($date_announce); ?></span></div>
+                <h2><a >Announcement by admin</a></h2>
+                <p class="mb-4 d-block"><?php echo htmlspecialchars($announcement); ?></p>
 
                 <div class="d-flex align-items-center author">
-                  <div class="photo"><img src="assets/img/person-1.jpg" alt="" class="img-fluid"></div>
+                  <div class="photo"><img src="<?php echo htmlspecialchars($announcement_img); ?>" alt="Default image" class="img-fluid"></div>
                   <div class="name">
-                    <h3 class="m-0 p-0">Cameron Williamson</h3>
+                    <h3 class="m-0 p-0">-Admin-</h3>
                   </div>
                 </div>
               </div>
@@ -199,7 +215,7 @@
       </section> <!-- End Post Grid Section -->
 
       <!-- ======= Culture Category Section ======= -->
-      <section class="category-section">
+      <!-- <section class="category-section">
         <div class="container" data-aos="fade-up">
 
           <div class="section-header d-flex justify-content-between align-items-center mb-5">
@@ -294,7 +310,7 @@
             </div>
           </div>
         </div>
-      </section><!-- End Culture Category Section -->
+      </section>End Culture Category Section -->
 
 
 
@@ -374,17 +390,7 @@
             <div class="copyright">
               © Copyright <strong><span>ZenBlog</span></strong>. All Rights Reserved
             </div>
-
-            <!-- <div class="credits"> -->
-              <!-- All the links in the footer should remain intact. -->
-              <!-- You can delete the links only if you purchased the pro version. -->
-              <!-- Licensing information: https://bootstrapmade.com/license/ -->
-              <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/ -->
-              <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
-            <!-- </div> -->
-
           </div>
-
         </div>
 
       <!-- </div> -->
@@ -416,13 +422,6 @@
   <!-- Bootstrap Notify -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@latest/dist/bootstrap-notify.min.js"></script>
 
-  
-
-  <script>
-
-
-
-  </script>
 
 
 </body>

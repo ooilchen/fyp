@@ -268,29 +268,25 @@
                                                 $sql = "SELECT * FROM admin_annnouncement";
                                                 $result = $conn->query($sql);
 
-                                                if ($result->num_rows > 0) {
-                                                    // Output data of each row
-                                                    while($row = $result->fetch_assoc()) {
-                                                        echo "<tr>";
-                                                        echo "<td>" . $row["announce_id"] . "</td>";
-                                                        echo "<td contenteditable='true'>" . $row["announcement"] . "</td>";
-                                                        echo "<td><img src='" . $row["announcement_img"] . "' width='150'></td>";
-                                                        echo "<td>" . $row["date_announce"] . "</td>";
-                                                        echo "<td><button class='btn btn-primary' data-toggle='modal' data-target='#newAnnounce' id='newsbyadmin'>Edit</button></td>";
-                                                        echo "</tr>";
-                                                    }
-                                                } else {
-                                                    echo "<tr><td colspan='4'>No announcements found. </td></tr>";
-                                                }
+                                                // Fetch the single record
+                                                $row = $result->fetch_assoc();
 
-                                                $conn->close();
+                                                if ($row) {
+                                                    echo "<tr>";
+                                                    echo "<td>" . $row["announce_id"] . "</td>";
+                                                    echo "<td>" . $row["announcement"] . "</td>";
+                                                    echo "<td><img src='" . $row["announcement_img"] . "' width='150'></td>";
+                                                    echo "<td>" . $row["date_announce"] . "</td>";
+                                                    echo "<td><button class='btn btn-primary' data-toggle='modal' data-target='#editAnnounce' id='newsbyadmin'>Edit</button></td>";
+                                                    echo "</tr>";
+                                               
                                                 ?>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
+                                <!-- End of announcement by admin -->
                             </div>
-                            <!-- End of announcement by admin -->
 
                             <!-- Carousel Image -->
                             <div class="card shadow mb-4">
@@ -324,7 +320,7 @@
                                                     while($row = $result->fetch_assoc()) {
                                                         echo "<tr>";
                                                         echo "<td>" . $row["image_id"] . "</td>";
-                                                        echo "<td><img src='" . $row["image_path"] . "' width='100'></td>";
+                                                        echo "<td><a href='" . $row["image_path"] . "' target='_blank'><img src='" . $row["image_path"] . "' width='100'></a></td>";
                                                         echo "<td><button class='btn btn-danger' onclick='deleteImage(\"" . $row["image_id"] . "\")'>Delete</button></td>";
                                                     }
                                                 } else {
@@ -365,6 +361,46 @@
                     
         </div>
         <!-- End of Content Wrapper -->
+
+        <!-- Edit Announcement Modal -->
+        <div class="modal fade" id="editAnnounce" tabindex="-1" role="dialog" aria-labelledby="editAnnouncementModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAnnouncementModalLabel">Edit Announcement</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 mb-3">
+                        <label for="announcementContent">Content:</label>
+                            <div class="input-group">
+                                <textarea class="form-control" id="announcementContent" name="announcementContent"><?php echo $row["announcement"]; ?></textarea>
+                            </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="announcementImage">Image:</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="announcementImage" name="announcementImage">
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <?php
+            } else {
+                echo "<tr><td colspan='4'>No announcements found. </td></tr>";
+            }
+            // $conn->close();
+        ?>
+        <!-- End of Edit Announcement Modal -->                                        
 
         <!--Upload carousel image -->
         <div class="modal fade" id="newHomeImg" tabindex="-1" role="dialog" aria-labelledby="homepageImgLabel" aria-hidden="true">
@@ -544,29 +580,30 @@
         return true; 
     }
 
+    // Delete announcement image
     function deleteImage(image_id) {
         if (confirm("Are you sure you want to delete this image?")) {
-            // Call a PHP script to delete the image
+            
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'delete_image.php', true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    // Handle successful response from PHP script
+                    
                     console.log(xhr.responseText);
                     alert("Image deleted successfully!");
-                    location.reload(); // Reload the page to reflect changes
+                    location.reload(); 
                 } else {
-                    // Handle error
+                    
                     console.error('Request failed. Status: ' + xhr.status);
                     alert("Failed to delete image. Please try again later.");
                 }
             };
             xhr.onerror = function() {
-                // Handle network error
+                
                 console.error('Request failed. Network error.');
             };
-            // Send the image_id to the PHP script for deletion
+            
             xhr.send('image_id=' + image_id);
         }
     }
