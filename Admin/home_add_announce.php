@@ -31,18 +31,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("ss", $announce_id, $newAnnounce);
     }
 
-    // Execute prepared statement
     if ($stmt->execute()) {
-        // Announcement inserted successfully
+        
         echo "Announcement added successfully!";
     } else {
-        // Error inserting announcement
+        
         echo "Error: " . $stmt->error;
     }
 
-    // Close statement
     $stmt->close();
-    // Close connection
+
     $conn->close();
     
 } else {

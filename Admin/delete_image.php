@@ -6,7 +6,7 @@ if (isset($_POST['image_id']) && !empty($_POST['image_id'])) {
     
     $image_id = $_POST['image_id'];
 
-    // Prepare SQL statement to select the image path
+    // Prepare SQL to select the image path
     $sql_select = "SELECT image_path FROM home_image WHERE image_id = ?";
     $stmt_select = $conn->prepare($sql_select);
     $stmt_select->bind_param("s", $image_id);
@@ -26,14 +26,13 @@ if (isset($_POST['image_id']) && !empty($_POST['image_id'])) {
         // Delete the file from the server
         unlink($image_path);
 
-        // Execute the SQL statement to delete the database record
+        // Execute the SQL to delete the database record
         if ($stmt_delete->execute()) {
             echo "Image and database record deleted successfully!";
         } else {
             echo "Error deleting database record: " . $stmt_delete->error;
         }
 
-        // Close prepared statement
         $stmt_delete->close();
 
     } else {

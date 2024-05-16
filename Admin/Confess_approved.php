@@ -4,13 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Dashboard - Category</title>
+    <title>Dashboard - Approved</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
     <!-- Custom styles for this template-->
     <link href="../sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template-->
     <link href="../fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
 
 </head>
 
@@ -30,9 +35,9 @@
                         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
         
                             <!-- Sidebar Toggle (Topbar) -->
-                            <!-- <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                                 <i class="fa fa-bars"></i>
-                            </button> -->
+                            </button>
         
                             <!-- Topbar Search -->
                             <!-- <form
@@ -91,59 +96,55 @@
                         <div class="container-fluid">
         
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">Confession Category</h1>
+                                <h1 class="h3 mb-0 text-gray-800">Confession - Approved</h1>
                                 
                             </div>
         
                             <!-- Content Row -->
 
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3 d-flex align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Categories</h6>
-                                        <div class="col-2 ml-auto text-right">
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newCategory" id="newCat">Create New</button>
-                                        </div>
-                                </div>
-                                
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>Category ID</th>
-                                                    <th>Name</th>
-                                                    <th>Description</th>
-                                                    <th>Action</th>
+                                                    <th>Content ID</th>
+                                                    <th>Category</th>
+                                                    <th>Content</th>
+                                                    <th>Image</th>
+                                                    <th>Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <?php
-                                                
+
                                                 include 'conn.php';
 
-                                                $sql = "SELECT `category_id`, `category_name`, `category_desc` FROM `category`";
+                                                $sql = "SELECT c.content_id, c.date_created, c.category_id, c.content, c.content_status, c.image, cat.category_name 
+                                                FROM content c 
+                                                INNER JOIN category cat ON c.category_id = cat.category_id
+                                                WHERE c.content_status = 1";
 
                                                 $result = $conn->query($sql);
 
-                                                // Check if any rows were returned
                                                 if ($result->num_rows > 0) {
                                                     // Output data into the HTML table
                                                     while ($row = $result->fetch_assoc()) {
                                                         echo "<tr>";
-                                                        echo "<td>" . $row["category_id"] . "</td>";
+                                                        echo "<td>" . $row["content_id"] . "</td>";
                                                         echo "<td>" . $row["category_name"] . "</td>";
-                                                        echo "<td>" . $row["category_desc"] . "</td>";
-                                                        echo "<td><button class='btn btn-danger' onclick='deleteCat(\"" . $row["category_id"] . "\")'>Delete</button></td>";
+                                                        echo "<td>" . $row["content"] . "</td>";
+                                                        echo "<td><a href='" . $row["image"] . "' target='_blank'>" . $row["image"] . "</a></td>";
+                                                        echo "<td>" . $row["date_created"] . "</td>";
                                                         echo "</tr>";
                                                     }
                                                 } else {
-                                                    echo "<tr><td colspan='3'>No data found</td></tr>";
+                                                    echo "<tr><td colspan='3'>No confession for now</td></tr>";
                                                 }
 
                                                 // Close connection
                                                 $conn->close();
                                             ?>
-
 
                                             </tbody>
                                         </table>
@@ -176,45 +177,6 @@
         </div>
         <!-- End of Content Wrapper -->
 
-        <!--Create Category modal-->
-        <div class="modal fade" id="newCategory" tabindex="-1" role="dialog" aria-labelledby="newCategoryLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <!-- <form method = 'POST' enctype='multipart/form-data' action=".php"> -->
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Create New Category</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Modal content goes here -->
-                        <div class="col-md-12 mb-3">
-                            <label>Category title</label>
-                            <div class="input-group">
-                                <textarea class="form-control" name="cat_name" id="cat_name" ></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <label>Description</label>
-                            <div class="input-group">
-                                <textarea class="form-control" name="catDesc" id="catDesc" ></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="alertContainer" ></div>    
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" onclick="validateCat()">Submit</button>
-                    </div>
-                    
-                    </div>
-                <!-- </form> -->
-            </div>
-        </div>   
-        <!--End of modal-->
-
         
 
     </div>
@@ -230,94 +192,17 @@
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <!-- Datatables -->
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+
     <script>
-
-    function validateCat() {
-
-        var newCat = document.getElementById("cat_name").value; 
-        var catDesc = document.getElementById("catDesc").value;
-        var alertContainer = document.getElementById("alertContainer");
-
-        if (newCat.trim() === '' || catDesc.trim() === '') {
-            var alertDiv = document.createElement("div");
-            alertDiv.className = "alert alert-danger";
-            alertDiv.setAttribute("role", "alert");
-            alertDiv.innerHTML = `
-                Please fill in all fields
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            `;
-            // Clear any previous alerts
-            while (alertContainer.firstChild) {
-                alertContainer.removeChild(alertContainer.firstChild);
-            }
-
-            // Append the new alert
-            alertContainer.appendChild(alertDiv);
-
-            return false; // Prevent form submission
-        }
-
-        // Clear any previous alerts
-        while (alertContainer.firstChild) {
-            alertContainer.removeChild(alertContainer.firstChild);
-        }
-
-        var formData = new FormData();
-        formData.append('newCat', newCat);
-        formData.append('catDesc', catDesc); 
-        var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'category_add.php', true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // Handle successful response from PHP script
-                        console.log(xhr.responseText);
-                        alert("New category is added!");
-                        location.reload();
-                        
-                    } else {
-                        // Handle error
-                        console.error('Request failed. Status: ' + xhr.status);
-                        alert("Please try again later.")
-                    }
-                };
-                xhr.onerror = function() {
-                    // Handle network error
-                    console.error('Request failed. Network error.');
-                };
-                xhr.send(formData);
-            
-
-        return true; // Allow form submission
-    }
-
-    function deleteCat(cat_id) {
-        if (confirm("Are you sure you want to delete this category?")) {
-            // Call a PHP script to delete the image
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'delete_cat.php', true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    // Handle successful response from PHP script
-                    console.log(xhr.responseText);
-                    alert("Category deleted successfully!");
-                    location.reload(); // Reload the page to reflect changes
-                } else {
-                    // Handle error
-                    console.error('Request failed. Status: ' + xhr.status);
-                    alert("Failed to delete category. Please try again later.");
-                }
-            };
-            xhr.onerror = function() {
-                // Handle network error
-                console.error('Request failed. Network error.');
-            };
-            // Send the image_id to the PHP script for deletion
-            xhr.send('cat_id=' + cat_id);
-        }
-    }
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
 
     </script>
       
