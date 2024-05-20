@@ -2,21 +2,9 @@
 include 'conn.php';
 
 if(isset($_GET['id'])) {
-    
-    $categoryId = mysqli_real_escape_string($conn, $_GET['id']);
 
-    $query = "SELECT * FROM `content` WHERE `category_id` = '$categoryId'";
-    $result = mysqli_query($conn, $query);
+    $rawId = $_GET['id']; 
 
-    if (mysqli_num_rows($result) > 0) {
-        
-        while ($row = mysqli_fetch_assoc($result)) {
-            
-            echo '<p>' . $row['content'] . '</p>';
-        }
-    } else {
-        echo '<p>No data found for the specified category ID</p>';
-    }
 } else {
     echo '<p>No category ID provided</p>';
 }
@@ -59,6 +47,9 @@ mysqli_close($conn);
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
   <!-- =======================================================
   * Template Name: ZenBlog
   * Updated: Jul 27 2023 with Bootstrap v5.3.1
@@ -74,9 +65,13 @@ mysqli_close($conn);
   <?php include 'header.php';?>
   <!-- End Header -->
 
-    <main id="main">
 
-      <div id="content-container"></div>
+    <main id="main">
+      <div data-aos="fade-up">
+
+      <h2 class="ms-4"><?php echo $rawId ?></h2>
+        <div id="content-container" class="content-container"></div>
+      </div>
 
     </main>
     <!-- End #main -->
@@ -84,7 +79,6 @@ mysqli_close($conn);
     <!--Add confession modal-->
     <div class="modal" tabindex="-1" role="dialog" id="newPost">
         <div class="modal-dialog modal-xl" role="document">
-            <!-- <form method = 'POST' enctype='multipart/form-data' action="test_addConfession.php"> -->
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title">Write your confession</h5>
@@ -138,7 +132,6 @@ mysqli_close($conn);
                     <button type="submit" id="new_confess" class="btn btn-primary" onclick="validateForm()">Submit</button>
                 </div>
               </div>
-            <!-- </form> -->
         </div>
     </div>   
     <!--End of modal-->
@@ -152,16 +145,16 @@ mysqli_close($conn);
         <div class="row justify-content-between">
           <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
             <div class="copyright">
-              © Copyright <strong><span>ZenBlog</span></strong>. All Rights Reserved
+              © Copyright <strong><span>Unimas Confession 23/24</span></strong>. All Rights Reserved
             </div>
 
-            <!-- <div class="credits"> -->
-              <!-- All the links in the footer should remain intact. -->
-              <!-- You can delete the links only if you purchased the pro version. -->
-              <!-- Licensing information: https://bootstrapmade.com/license/ -->
-              <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/ -->
-              <!-- Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> -->
-            <!-- </div> -->
+            <!-- <div class="credits">
+              All the links in the footer should remain intact.
+              You can delete the links only if you purchased the pro version.
+              Licensing information: https://bootstrapmade.com/license/
+              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/
+              Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div> -->
 
           </div>
 
@@ -194,42 +187,13 @@ mysqli_close($conn);
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <!-- Bootstrap Notify -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@latest/dist/bootstrap-notify.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@latest/dist/bootstrap-notify.min.js"></script> -->
 
   
 
   <script>
-    //   document.addEventListener('DOMContentLoaded', function() {
-    //   fetch('fetch_content.php')
-    //     .then(response => response.json())
-    //     .then(contentArray => {
-    //       const contentContainer = document.getElementById('content-container');
 
-    //       contentArray.forEach(content => {
-    //         const contentCard = document.createElement('div');
-    //         contentCard.classList.add('content');
-
-    //         contentCard.innerHTML = `
-    //           <h2>${content.content_id}</h2>
-    //           <p>Date Created: ${content.date_created}</p>
-    //           <p>Category ID: ${content.category_id}</p>
-    //           <img src="${content.image}" alt="Content Image">
-    //           <p>${content.content}</p>
-    //           <div class="content-actions">
-    //             <button class="btn btn-like" data-id="${content.content_id}">Like</button>
-    //             <button class="btn btn-comment" data-id="${content.content_id}">Comment</button>
-    //           </div>
-    //         `;
-
-    //         contentContainer.appendChild(contentCard);
-    //       });
-    //     })
-    //     .catch(error => {
-    //       console.error('Error fetching content:', error);
-    //     });
-    // });
-
-    document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const categoryId = urlParams.get('id');
 
@@ -245,14 +209,16 @@ mysqli_close($conn);
                     contentCard.classList.add('content');
 
                     contentCard.innerHTML = `
-                        <h2>${content.content_id}</h2>
-                        <p>Date Created: ${content.date_created}</p>
-                        <p>Category ID: ${content.category_id}</p>
-                        <img src="${content.image}" alt="Content Image">
-                        <p>${content.content}</p>
-                        <div class="content-actions">
-                            <button class="btn btn-like" data-id="${content.content_id}">Like</button>
-                            <button class="btn btn-comment" data-id="${content.content_id}">Comment</button>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <p>${content.content}</p>
+                                <p><small>${content.date_created} #${content.category_name}</small></p>
+                                ${content.image ? `<img src="${content.image}" alt="Content Image" class="img-fluid">` : ''}
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-like" data-id="${content.content_id}">Like <i class="fas fa-thumbs-up"></i></button>
+                                <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
+                            </div>
                         </div>
                     `;
 
@@ -266,6 +232,25 @@ mysqli_close($conn);
         console.error('No category ID provided');
     }
 });
+
+
+// <!-- Bootstrap Notify -->
+
+// function showNotification(from, align){
+
+//   $.notify({
+//       icon: "add_alert",
+//       message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
+
+//   },{
+//       type: 'success',
+//       timer: 4000,
+//       placement: {
+//           from: from,
+//           align: align
+//       }
+//   });
+// }
 
 
   </script>

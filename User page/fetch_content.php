@@ -7,11 +7,11 @@ if(isset($_GET['id'])) {
     
     $categoryId = mysqli_real_escape_string($conn, $_GET['id']);
 
-    // Fetch active content from database where content_status is 1 and category_id matches the fetched id
-    $sql = "SELECT `content_id`, `date_created`, `category_id`, `content`, `content_status`, `image` 
-            FROM `content` 
-            WHERE `content_status` = 1 
-            AND `category_id` = '$categoryId'";
+    $sql = "SELECT c.`content_id`, c.`date_created`, c.`category_id`, c.`content`, c.`content_status`, c.`image`, cat.`category_name` 
+            FROM `content` c
+            JOIN `category` cat ON c.`category_id` = cat.`category_id`
+            WHERE c.`content_status` = 1 
+            AND c.`category_id` = '$categoryId'";
     $result = $conn->query($sql);
 
     $content = array();

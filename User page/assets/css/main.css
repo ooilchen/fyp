@@ -934,9 +934,9 @@ section {
 /*--------------------------------------------------------------
 # Comments
 --------------------------------------------------------------*/
-.comment {
+/* .comment { */
   /* Font not working in <textarea> for this version of bs */
-}
+/* } */
 
 .comment .avatar {
   position: relative;
@@ -1327,21 +1327,40 @@ li a:hover {
 /*--------------------------------------------------------------
 # Card
 --------------------------------------------------------------*/
-
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
 .content {
+  font-family: var(--font-primary);
   border: 1px solid #ddd;
   padding: 20px;
-  margin: 20px;
+  margin: 10px;
   border-radius: 10px;
+  flex: 1 1 calc(33% - 20px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
+
 .content img {
-  max-width: 100%;
+  max-width: 70%;
   height: auto;
 }
-.content-actions {
-  margin-top: 10px;
+
+.content-divider {
+  border-top: 1px solid #ddd;
+  margin: 20px 0; 
 }
+
+.content-footer {
+  margin-top: auto; 
+  display: flex;
+  justify-content: flex-start;
+}
+
 .btn {
   padding: 5px 10px;
   margin-right: 5px;
@@ -1349,11 +1368,104 @@ li a:hover {
   border-radius: 5px;
   border: none;
 }
+
 .btn-like {
-  background-color: #28a745;
+  background-color: var(--color-secondary);
   color: white;
+  padding: 10px;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.btn-like i {
+  margin-right: 5px;
+}
+
 .btn-comment {
-  background-color: #ffc107;
+  background-color: var(--color-primary-dark);
   color: white;
+  padding: 10px;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.btn-comment i {
+  margin-right: 5px;
+}
+
+
+
+
+/*--------------------------------------------------------------
+# Sign_up
+--------------------------------------------------------------*/
+.signup-body {
+  font-family: var(--font-primary);
+  background-color: var(--color-secondary-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.signup-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+/* h2 {
+  text-align: center;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+label {
+  margin-top: 10px;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+} */
+.account-type {
+  margin: 10px 0;
+}
+/* button[type="submit"],
+button[type="button"] {
+  background-color: #5cb85c;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+button[type="submit"]:hover,
+button[type="button"]:hover {
+  background-color: #4cae4c;
+} */
+.login-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+/* a {
+  color: #337ab7;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+} */
+
+.error { color: red; }
+  .success { color: green; }

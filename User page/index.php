@@ -1,3 +1,4 @@
+<?php include 'conn.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +11,8 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="../assets/img/favicon.png" rel="icon">
-  <link href="../User page/assets/img/person-2.jpg" rel="apple-touch-icon">
+  <!-- <link href="../assets/img/favicon.png" rel="icon">
+  <link href="../User page/assets/img/person-2.jpg" rel="apple-touch-icon"> -->
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,13 +33,6 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-  <!-- =======================================================
-  * Template Name: ZenBlog
-  * Updated: Jul 27 2023 with Bootstrap v5.3.1
-  * Template URL: https://bootstrapmade.com/zenblog-bootstrap-blog-template/
-  * Author: BootstrapMade.com
-  * License: https:///bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -104,7 +98,7 @@
         </div>
       </section><!-- End Hero Slider Section -->
 
-      <!-- ======= Post Grid Section ======= -->
+      <!-- ======= Announcement by admin Section ======= -->
       <section id="posts" class="posts">
         <div class="container" data-aos="fade-up">
           <div class="row g-5">
@@ -162,47 +156,41 @@
                   </div>
                 </div>
 
-                <!-- Trending Section -->
+                <!-- Latest Section -->
                 <div class="col-lg-4">
 
                   <div class="trending">
-                    <h3>Trending</h3>
+                    <h3>Latest</h3>
                     <ul class="trending-post">
-                      <li>
-                        <a href="single-post.html">
-                          <span class="number">1</span>
-                          <h3>The Best Homemade Masks for Face (keep the Pimples Away)</h3>
-                          <span class="author">Jane Cooper</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="single-post.html">
-                          <span class="number">2</span>
-                          <h3>17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</h3>
-                          <span class="author">Wade Warren</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="single-post.html">
-                          <span class="number">3</span>
-                          <h3>13 Amazing Poems from Shel Silverstein with Valuable Life Lessons</h3>
-                          <span class="author">Esther Howard</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="single-post.html">
-                          <span class="number">4</span>
-                          <h3>9 Half-up/half-down Hairstyles for Long and Medium Hair</h3>
-                          <span class="author">Cameron Williamson</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="single-post.html">
-                          <span class="number">5</span>
-                          <h3>Life Insurance And Pregnancy: A Working Mom’s Guide</h3>
-                          <span class="author">Jenny Wilson</span>
-                        </a>
-                      </li>
+                      <?php
+                        include 'conn.php';
+
+                        // Execute SQL query to fetch latest content
+                        $sql = "SELECT `content_id`, `date_created`, `category_id`, `content`, `content_status`, `image`
+                                FROM `content`
+                                WHERE `content_status` = 1
+                                ORDER BY `date_created` DESC
+                                LIMIT 5";
+
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                          // Output data of each row
+                          while ($row = $result->fetch_assoc()) {
+                            echo "<li>";
+                            echo "<a href='single-post.html'>";
+                            echo "<span class='number'>" . $row['content_id'] . "</span>";
+                            echo "<h3>" . $row['content'] . "</h3>";
+                            // Add more elements to display as needed
+                            echo "</a>";
+                            echo "</li>";
+                          }
+                        } else {
+                          echo "No trending content found.";
+                        }
+
+                        $conn->close();
+                      ?>
                     </ul>
                   </div>
 
@@ -212,105 +200,7 @@
 
           </div> <!-- End .row -->
         </div>
-      </section> <!-- End Post Grid Section -->
-
-      <!-- ======= Culture Category Section ======= -->
-      <!-- <section class="category-section">
-        <div class="container" data-aos="fade-up">
-
-          <div class="section-header d-flex justify-content-between align-items-center mb-5">
-            <h2>Culture</h2>
-            <div><a href="category.html" class="more">See All Culture</a></div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-9">
-
-              <div class="d-lg-flex post-entry-2">
-                <a href="single-post.html" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
-                  <img src="assets/img/post-landscape-6.jpg" alt="" class="img-fluid">
-                </a>
-                <div>
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h3><a href="single-post.html">What is the son of Football Coach John Gruden, Deuce Gruden doing Now?</a></h3>
-                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio placeat exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas, nobis error deserunt aliquam temporibus sapiente, laudantium dolorum itaque libero eos deleniti?</p>
-                  <div class="d-flex align-items-center author">
-                    <div class="photo"><img src="assets/img/person-2.jpg" alt="" class="img-fluid"></div>
-                    <div class="name">
-                      <h3 class="m-0 p-0">Wade Warren</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-4">
-                  <div class="post-entry-1 border-bottom">
-                    <a href="single-post.html"><img src="assets/img/post-landscape-1.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                    <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
-                  </div>
-
-                  <div class="post-entry-1">
-                    <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">5 Great Startup Tips for Female Founders</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                  </div>
-                </div>
-                <div class="col-lg-8">
-                  <div class="post-entry-1">
-                    <a href="single-post.html"><img src="assets/img/post-landscape-2.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                    <span class="author mb-3 d-block">Jenny Wilson</span>
-                    <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-3">
-              <div class="post-entry-1 border-bottom">
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                <h2 class="mb-2"><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                <span class="author mb-3 d-block">Jenny Wilson</span>
-              </div>
-
-              <div class="post-entry-1 border-bottom">
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                <h2 class="mb-2"><a href="single-post.html">17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</a></h2>
-                <span class="author mb-3 d-block">Jenny Wilson</span>
-              </div>
-
-              <div class="post-entry-1 border-bottom">
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                <h2 class="mb-2"><a href="single-post.html">9 Half-up/half-down Hairstyles for Long and Medium Hair</a></h2>
-                <span class="author mb-3 d-block">Jenny Wilson</span>
-              </div>
-
-              <div class="post-entry-1 border-bottom">
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                <h2 class="mb-2"><a href="single-post.html">Life Insurance And Pregnancy: A Working Mom’s Guide</a></h2>
-                <span class="author mb-3 d-block">Jenny Wilson</span>
-              </div>
-
-              <div class="post-entry-1 border-bottom">
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                <h2 class="mb-2"><a href="single-post.html">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
-                <span class="author mb-3 d-block">Jenny Wilson</span>
-              </div>
-
-              <div class="post-entry-1 border-bottom">
-                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                <h2 class="mb-2"><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                <span class="author mb-3 d-block">Jenny Wilson</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>End Culture Category Section -->
+      </section> <!-- End Announcement by admin Section -->
 
 
 

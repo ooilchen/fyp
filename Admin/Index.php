@@ -1,3 +1,44 @@
+<?php
+
+    // Set session timeout to 30 minutes (1800 seconds)
+    ini_set('session.gc_maxlifetime', 180);
+    session_start();
+
+
+    // Redirect to login page if user is not logged in
+    if (!isset($_SESSION['username'])) {
+        header("Location: Sign_In.php");
+        exit();
+    }
+
+    include 'conn.php';
+
+    // Count total content
+    $sql_total = "SELECT COUNT(*) AS total_count FROM content";
+    $result_total = $conn->query($sql_total);
+    $total_count = $result_total->fetch_assoc()['total_count'];
+
+    // Count pending confessions
+    $sql_pending = "SELECT COUNT(*) AS count FROM content WHERE content_status = 0";
+    $result_pending = $conn->query($sql_pending);
+    $pending_count = $result_pending->fetch_assoc()['count'];
+
+    // Count total registered users
+    $sql_users = "SELECT COUNT(*) AS user_count FROM user";
+    $result_users = $conn->query($sql_users);
+    $user_count = $result_users->fetch_assoc()['user_count'];
+
+    // Fetch count of content by category
+    $sql_category = "SELECT category_id, COUNT(*) AS count FROM content GROUP BY category_id";
+    $result_category = $conn->query($sql_category);
+    $category_data = [];
+    while ($row = $result_category->fetch_assoc()) {
+        $category_data[] = $row;
+    }
+
+    $conn->close();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,34 +64,6 @@
 
         <?php include 'sidebar.php'; ?>
 
-        <?php 
-            include 'conn.php';
-
-             // Execute SQL query to count total content
-            $sql_total = "SELECT COUNT(*) AS total_count FROM content";
-            $result_total = $conn->query($sql_total);
-
-            $total_count = 0;
-            if ($result_total->num_rows > 0) {
-                // Output data of each row
-                $row_total = $result_total->fetch_assoc();
-                $total_count = $row_total["total_count"];
-            }
-
-            // Execute SQL query to count pending confessions
-            $sql = "SELECT COUNT(*) AS count FROM content WHERE content_status = 0";
-            $result = $conn->query($sql);
-
-            $pending_count = 0;
-            if ($result->num_rows > 0) {
-                // Output data of each row
-                $row = $result->fetch_assoc();
-                $pending_count = $row["count"];
-            }
-
-            $conn->close();
-        ?>
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -60,25 +73,6 @@
                         <!-- Topbar -->
                         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
         
-                            <!-- Sidebar Toggle (Topbar) -->
-                            <!-- <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                                <i class="fa fa-bars"></i>
-                            </button> -->
-        
-                            <!-- Topbar Search -->
-                            <!-- <form
-                                class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                        aria-label="Search" aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button">
-                                            <i class="fas fa-search fa-sm"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form> -->
-        
                             <!-- Topbar Navbar -->
                             <ul class="navbar-nav ml-auto">
         
@@ -86,7 +80,7 @@
                                 <li class="nav-item dropdown no-arrow">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['username'];?></span>
                                         <img class="img-profile rounded-circle"
                                             src="../images/undraw_Female_avatar_efig.png">
                                     </a>
@@ -169,7 +163,7 @@
                                     </a>    
                                 </div>
         
-                                <!-- Earnings (Monthly) Card Example -->
+                                <!-- Total user card -->
                                 <div class="col-xl-3 col-md-6 mb-4">
                                     <div class="card border-left-info shadow h-100 py-2">
                                         <div class="card-body">
@@ -179,14 +173,7 @@
                                                     </div>
                                                     <div class="row no-gutters align-items-center">
                                                         <div class="col-auto">
-                                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                                        </div>
-                                                        <div class="col">
-                                                            <div class="progress progress-sm mr-2">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                                    aria-valuemax="100"></div>
-                                                            </div>
+                                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $user_count; ?></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -233,21 +220,32 @@
                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                                 </a>
-                                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                                    aria-labelledby="dropdownMenuLink">
-                                                    <div class="dropdown-header">Dropdown Header:</div>
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#">Something else here</a>
-                                                </div>
                                             </div>
                                         </div>
                                         <!-- Card Body -->
                                         <div class="card-body">
-                                            <div class="chart-area">
+                                            <!-- <div class="chart-area">
                                                 <canvas id="myAreaChart"></canvas>
-                                            </div>
+                                            </div> -->
+                                            <?php foreach ($category_data as $category) { ?>
+                                                <div class="col-xl-4 col-md-6 mb-4">
+                                                    <div class="card border-left-info shadow h-100 py-2">
+                                                        <div class="card-body">
+                                                            <div class="row no-gutters align-items-center">
+                                                                <div class="col mr-2">
+                                                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                                        <?php echo $category['category_id']; ?></div>
+                                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                                        <?php echo $category['count']; ?></div>
+                                                                </div>
+                                                                <div class="col-auto">
+                                                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -293,6 +291,34 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Donut Chart -->
+                                <div class="col-xl-4 col-lg-5">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Content by Category</h6>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="chart-pie pt-4">
+                                                <canvas id="myPieChart"></canvas>
+                                            </div>
+                                            <hr>
+                                            <div class="row mt-4">
+                                                <?php foreach ($category_data as $category) { ?>
+                                                    <div class="col-md-6">
+                                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                            <?php echo $category['category_id']; ?></div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                            <?php echo $category['count']; ?></div>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
         
                             <!-- Content Row -->
@@ -371,10 +397,22 @@
     </div>
     <!-- End of Page Wrapper -->
 
-    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
+    <script src="js/demo/chart-bar-demo.js"></script>
+
 </body>
 </html>

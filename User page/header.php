@@ -8,7 +8,7 @@
       </a>
 
       <nav id="navbar" class="navbar">
-        <ul>
+      <ul>
         <?php
           include 'conn.php';
 
@@ -20,6 +20,8 @@
           if (mysqli_num_rows($result) > 0) {
               echo '<li class="dropdown"><a><span>Confession</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>';
               echo '<ul>';
+              // Add the "All" option
+              echo '<li><a href="all_post.php">All</a></li>';
               // Loop through each category and create a dropdown item
               while ($row = mysqli_fetch_assoc($result)) {
                   $categoryId = $row['category_id'];
@@ -33,17 +35,14 @@
 
           // Close the database connection
           mysqli_close($conn);
-          ?>
+        ?>
 
-          <li><a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#newPost">Add Confession</a></li>
-          <!-- <li><a href="single-post.html">Single Post</a></li> -->
-          
-          <!-- </li> -->
+        <li><a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#newPost">Add Confession</a></li>
+        <!-- <li><a href="about.html">About</a></li> -->
+        <li><a href="contact.html">Sign up/Sign in</a></li>
+      </ul>
+    </nav><!-- .navbar -->
 
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Sign up/Sign in</a></li>
-        </ul>
-      </nav><!-- .navbar -->
 
       <div class="position-relative">
 
