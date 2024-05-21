@@ -10,7 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if an image was uploaded
     if (!empty($_FILES["carousel_image"]["name"])) {
 
-        // File upload handling
         $targetDirectory = "../images/"; 
         $fileExtension = pathinfo($_FILES["carousel_image"]["name"], PATHINFO_EXTENSION);
         $newFileName = $img_id . '.' . $fileExtension; // Rename the file to the image ID

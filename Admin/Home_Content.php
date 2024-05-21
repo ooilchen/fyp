@@ -32,25 +32,6 @@
                         <!-- Topbar -->
                         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
         
-                            <!-- Sidebar Toggle (Topbar) -->
-                            <!-- <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                                <i class="fa fa-bars"></i>
-                            </button> -->
-        
-                            <!-- Topbar Search -->
-                            <!-- <form
-                                class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                        aria-label="Search" aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button">
-                                            <i class="fas fa-search fa-sm"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form> -->
-        
                             <!-- Topbar Navbar -->
                             <ul class="navbar-nav ml-auto">
         
@@ -125,19 +106,22 @@
                                                 $sql = "SELECT * FROM admin_annnouncement";
                                                 $result = $conn->query($sql);
 
-                                                // Fetch the single record
-                                                $row = $result->fetch_assoc();
-
-                                                if ($row) {
-                                                    echo "<tr>";
-                                                    echo "<td>" . $row["announce_id"] . "</td>";
-                                                    echo "<td>" . $row["announcement"] . "</td>";
-                                                    echo "<td><img src='" . $row["announcement_img"] . "' width='150'></td>";
-                                                    echo "<td>" . $row["date_announce"] . "</td>";
-                                                    echo "<td><button class='btn btn-primary' data-toggle='modal' data-target='#editAnnounce' id='newsbyadmin'>Edit</button></td>";
-                                                    echo "</tr>";
-                                               
-                                                ?>
+                                                // Check if the query was successful and contains rows
+                                                if ($result && $result->num_rows > 0) {
+                                                    // Fetch the single record
+                                                    while($row = $result->fetch_assoc()) {
+                                                        echo "<tr>";
+                                                        echo "<td>" . $row["announce_id"] . "</td>";
+                                                        echo "<td>" . $row["announcement"] . "</td>";
+                                                        echo "<td><img src='" . $row["announcement_img"] . "' width='150'></td>";
+                                                        echo "<td>" . $row["date_announce"] . "</td>";
+                                                        echo "<td><button class='btn btn-primary' data-toggle='modal' data-target='#editAnnounce' data-id='" . $row["announce_id"] . "' data-content='" . htmlspecialchars($row["announcement"], ENT_QUOTES) . "' data-img='" . $row["announcement_img"] . "' id='newsbyadmin'>Edit</button></td>";
+                                                        echo "</tr>";
+                                                    }
+                                                } else {
+                                                    echo "<tr><td colspan='5'>No announcements found.</td></tr>";
+                                                }
+                                            ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -223,41 +207,43 @@
         <div class="modal fade" id="editAnnounce" tabindex="-1" role="dialog" aria-labelledby="editAnnouncementModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editAnnouncementModalLabel">Edit Announcement</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-12 mb-3">
-                        <label for="announcementContent">Content:</label>
-                            <div class="input-group">
-                                <textarea class="form-control" id="announcementContent" name="announcementContent"><?php echo $row["announcement"]; ?></textarea>
+                    <form id="editAnnouncementForm" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editAnnouncementModalLabel">Edit Announcement</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="announcementId" name="announcementId">
+                            <div class="col-md-12 mb-3">
+                                <label for="announcementContent">Content:</label>
+                                <div class="input-group">
+                                    <textarea class="form-control" id="announcementContent" name="announcementContent"></textarea>
+                                </div>
                             </div>
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label for="announcementImage">Image:</label>
-                            <div class="input-group">
-                                <input type="file" class="form-control" id="announcementImage" name="announcementImage">
+                            <div class="col-md-12 mb-3">
+                                <label for="announcementImageLink">Image Link:</label>
+                                <div class="input-group">
+                                    <a id="announcementImageLink" href="#" target="_blank"></a>
+                                </div>
                             </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
-                </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="announcementImage">Change Image:</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="announcementImage" name="announcementImage">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <?php
-            } else {
-                echo "<tr><td colspan='4'>No announcements found. </td></tr>";
-            }
-            // $conn->close();
-        ?>
-        <!-- End of Edit Announcement Modal -->                                        
+        <!-- End of Edit Announcement Modal -->                                    
 
         <!--Upload carousel image -->
         <div class="modal fade" id="newHomeImg" tabindex="-1" role="dialog" aria-labelledby="homepageImgLabel" aria-hidden="true">
@@ -299,6 +285,7 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
     <!-- Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -308,77 +295,7 @@
 
     <script>
 
-    // Validate announcement, not empty
-    // function validateContent() {
-
-    //     var newAnnounce = document.getElementById("announcement").value; 
-    //     var alertContainer = document.getElementById("alertContainer");
-
-    //     if (newAnnounce.trim() === '' ) {
-    //         var alertDiv = document.createElement("div");
-    //         alertDiv.className = "alert alert-danger";
-    //         alertDiv.setAttribute("role", "alert");
-    //         alertDiv.innerHTML = `
-    //             Please fill in all fields
-    //             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                 <span aria-hidden="true">&times;</span>
-    //             </button>
-    //         `;
-    //         // Clear any previous alerts
-    //         while (alertContainer.firstChild) {
-    //             alertContainer.removeChild(alertContainer.firstChild);
-    //         }
-
-    //         // Append the new alert
-    //         alertContainer.appendChild(alertDiv);
-
-    //         return false; // Prevent form submission
-    //     }
-
-    //     // Clear any previous alerts
-    //     while (alertContainer.firstChild) {
-    //         alertContainer.removeChild(alertContainer.firstChild);
-    //     }
-
-    //     var formData = new FormData();
-    //     formData.append('newAnnounce', newAnnounce);
-        
-    //     // Get the file input element
-    //     var fileInput = document.getElementById('admin_image');
-    //     // Check if a file is selected
-    //     if (fileInput.files.length > 0) {
-    //         // Append the file to FormData
-    //         formData.append('admin_image', fileInput.files[0]);
-    //     }
-
-    //     var xhr = new XMLHttpRequest();
-    //             xhr.open('POST', 'home_add_announce.php', true);
-    //             xhr.onload = function() {
-    //                 if (xhr.status === 200) {
-    //                     // Handle successful response from PHP script
-    //                     console.log(xhr.responseText);
-    //                     alert("Announcement is added!");
-    //                     location.reload();
-                        
-    //                 } else {
-    //                     // Handle error
-    //                     console.error('Request failed. Status: ' + xhr.status);
-    //                     alert("Please try again later.")
-    //                 }
-    //             };
-    //             xhr.onerror = function() {
-    //                 // Handle network error
-    //                 console.error('Request failed. Network error.');
-    //             };
-    //             xhr.send(formData);
-            
-
-    //     return true; 
-    // }
-
-
-
-    //Validate image not empty
+    // ------Validate image not empty------
     function validateImg() {
 
         var errorContainer = document.getElementById("errorContainer");
@@ -437,7 +354,7 @@
         return true; 
     }
 
-    // Delete announcement image
+    // ------Delete announcement image------
     function deleteImage(image_id) {
         if (confirm("Are you sure you want to delete this image?")) {
             
@@ -464,6 +381,50 @@
             xhr.send('image_id=' + image_id);
         }
     }
+
+    // ------Populate data in modal-------
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#editAnnounce').on('show.bs.modal', function(event) {
+
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var id = button.data('id'); // Extract info from data-* attributes
+            var content = button.data('content');
+            var img = button.data('img');
+
+            // Update the modal's content
+            var modal = $(this);
+            modal.find('#announcementId').val(id);
+            modal.find('#announcementContent').val(content);
+            modal.find('#announcementImageLink').attr('href', img).text(img);
+        });
+
+        // -------Update announcment by admin------
+        $('#editAnnouncementForm').on('submit', function(event) {
+            event.preventDefault();
+            
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: 'admin_update.php', 
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Handle the response from the server
+                    alert(response);
+                    // Close the modal
+                    $('#editAnnounce').modal('hide');
+                    // Optionally reload the page or the table to reflect the changes
+                    location.reload();
+                },
+                error: function() {
+                    alert('There was an error updating the announcement.');
+                }
+            });
+        });
+    });
+
 
     </script>
       

@@ -12,6 +12,10 @@
     <!-- Custom fonts for this template-->
     <link href="../fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
 </head>
 
 <body>
@@ -29,24 +33,6 @@
                         <!-- Topbar -->
                         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
         
-                            <!-- Sidebar Toggle (Topbar) -->
-                            <!-- <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                                <i class="fa fa-bars"></i>
-                            </button> -->
-        
-                            <!-- Topbar Search -->
-                            <!-- <form
-                                class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                        aria-label="Search" aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button">
-                                            <i class="fas fa-search fa-sm"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form> -->
         
                             <!-- Topbar Navbar -->
                             <ul class="navbar-nav ml-auto">
@@ -114,6 +100,8 @@
                                                     <th>Name</th>
                                                     <th>Description</th>
                                                     <th>Action</th>
+                                                    <th>Action</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -121,7 +109,7 @@
                                                 
                                                 include 'conn.php';
 
-                                                $sql = "SELECT `category_id`, `category_name`, `category_desc` FROM `category`";
+                                                $sql = "SELECT * FROM `category`";
 
                                                 $result = $conn->query($sql);
 
@@ -133,7 +121,12 @@
                                                         echo "<td>" . $row["category_id"] . "</td>";
                                                         echo "<td>" . $row["category_name"] . "</td>";
                                                         echo "<td>" . $row["category_desc"] . "</td>";
-                                                        echo "<td><button class='btn btn-danger' onclick='deleteCat(\"" . $row["category_id"] . "\")'>Delete</button></td>";
+                                                        echo "<td>" . ($row["status"] == '1' ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>') . "</td>";
+                                                        echo "<td><button class='btn btn-primary' onclick='toggleStatus(\"" . $row["category_id"] . "\", " . $row["status"] . ")'>Toggle Status</button></td>";
+                                                        echo "<td class='text-center'><div class='form-check form-switch'>
+                                                        <input class='form-check-input' type='checkbox' id='switchbtn" . $row["category_id"] . "' onchange='reply_click({id: this.id, status_cat: ".$row["status"]."})'>
+                                                     </div></td>";
+
                                                         echo "</tr>";
                                                     }
                                                 } else {
@@ -223,6 +216,7 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -292,32 +286,87 @@
         return true; // Allow form submission
     }
 
-    function deleteCat(cat_id) {
-        if (confirm("Are you sure you want to delete this category?")) {
-            // Call a PHP script to delete the image
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'delete_cat.php', true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    // Handle successful response from PHP script
-                    console.log(xhr.responseText);
-                    alert("Category deleted successfully!");
-                    location.reload(); // Reload the page to reflect changes
-                } else {
-                    // Handle error
-                    console.error('Request failed. Status: ' + xhr.status);
-                    alert("Failed to delete category. Please try again later.");
-                }
-            };
-            xhr.onerror = function() {
-                // Handle network error
-                console.error('Request failed. Network error.');
-            };
-            // Send the image_id to the PHP script for deletion
-            xhr.send('cat_id=' + cat_id);
-        }
-    }
+    async function reply_click({
+			id,
+			status_cat
+		}) {
+
+            var newId = id.replace('switchbtn', '');
+            var newStatus;
+
+            var body = {
+               id: newId,
+               status_cat: newStatus
+			   }
+
+            rawResponse = await fetch('update_category_status.php', {
+				async: false,
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(body)
+			   });
+            const content = await rawResponse.json();
+
+            alert("Your status has been changed.");
+            window.location.reload();
+         }
+
+    // function deleteCat(cat_id) {
+    //     if (confirm("Are you sure you want to delete this category?")) {
+    //         // Call a PHP script to delete the image
+    //         var xhr = new XMLHttpRequest();
+    //         xhr.open('POST', 'delete_cat.php', true);
+    //         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    //         xhr.onload = function() {
+    //             if (xhr.status === 200) {
+    //                 // Handle successful response from PHP script
+    //                 console.log(xhr.responseText);
+    //                 alert("Category deleted successfully!");
+    //                 location.reload(); // Reload the page to reflect changes
+    //             } else {
+    //                 // Handle error
+    //                 console.error('Request failed. Status: ' + xhr.status);
+    //                 alert("Failed to delete category. Please try again later.");
+    //             }
+    //         };
+    //         xhr.onerror = function() {
+    //             // Handle network error
+    //             console.error('Request failed. Network error.');
+    //         };
+    //         // Send the image_id to the PHP script for deletion
+    //         xhr.send('cat_id=' + cat_id);
+    //     }
+    // }
+
+    // function toggleStatus(categoryId, currentStatus) {
+    //     var newStatus = currentStatus === '1' ? '0' : '1'; // Toggle status
+    //     // Send AJAX request to update status
+    //     $.ajax({
+    //     type: 'POST',
+    //     url: 'update_category_status.php',
+    //     data: { category_id: categoryId, new_status: newStatus },
+    //     dataType: 'json', // Expect JSON response
+    //     success: function(response) {
+    //         // Handle JSON response
+    //         if (response.status === 'success') {
+    //             console.log(response.message);
+    //             // Update UI or do something else
+    //         } else {
+    //             console.error(response.message);
+    //             // Handle error
+    //         }
+    //     },
+    //     error: function(xhr, status, error) {
+    //         // Handle error
+    //         console.error(error);
+    //     }
+    //     });
+
+    // }
+
 
     </script>
       
