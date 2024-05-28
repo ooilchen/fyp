@@ -1,25 +1,37 @@
 <?php
 
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: *");
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PATCH');
+    include 'conn.php';
 
-include 'conn.php';
+    // Enable error reporting
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
-$post = file_get_contents('php://input');
-$value = json_decode($post);
+    $post = file_get_contents('php://input');
+    $value = json_decode($post);
 
-//update status
-$id = $value->id;
-$status = $value->status_cat;
-$sql = "UPDATE `category` SET `status`='".$status."' WHERE `category_id`='".$id."'";
-    
-if(mysqli_query($con, $sql)){
-    echo json_encode("SUCCESS");
-}else{
-    echo json_encode("FAILED");
-}
+    // Validate and sanitize input
+    $id = mysqli_real_escape_string($conn, $value->category_id);
+    $status = mysqli_real_escape_string($conn, $value->new_status);
 
-$con->close();
+    // Use prepared statements for better security
+    $stmt = $conn->prepare("UPDATE `category` SET `status` = ? WHERE `category_id` = ?");
+    $stmt->bind_param("ss", $status, $id);
+
+    $response = array();
+
+    if ($stmt->execute()) {
+        $response['status'] = 'success';
+        $response['message'] = 'Status updated successfully.';
+    } else {
+        $response['status'] = 'error';
+        $response['message'] = 'Failed to update status.';
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+
+    // Return the response as JSON
+    echo json_encode($response);
 
 ?>

@@ -99,8 +99,7 @@
                                                     <th>Category ID</th>
                                                     <th>Name</th>
                                                     <th>Description</th>
-                                                    <th>Action</th>
-                                                    <th>Action</th>
+                                                    <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -122,11 +121,7 @@
                                                         echo "<td>" . $row["category_name"] . "</td>";
                                                         echo "<td>" . $row["category_desc"] . "</td>";
                                                         echo "<td>" . ($row["status"] == '1' ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>') . "</td>";
-                                                        echo "<td><button class='btn btn-primary' onclick='toggleStatus(\"" . $row["category_id"] . "\", " . $row["status"] . ")'>Toggle Status</button></td>";
-                                                        echo "<td class='text-center'><div class='form-check form-switch'>
-                                                        <input class='form-check-input' type='checkbox' id='switchbtn" . $row["category_id"] . "' onchange='reply_click({id: this.id, status_cat: ".$row["status"]."})'>
-                                                     </div></td>";
-
+                                                        echo "<td><button class='btn btn-primary' onclick='toggleStatus(\"" . $row["category_id"] . "\", \"" . $row["status"] . "\")'>Change Status</button></td>";
                                                         echo "</tr>";
                                                     }
                                                 } else {
@@ -215,7 +210,6 @@
 
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Popper.js -->
@@ -312,60 +306,36 @@
 
             alert("Your status has been changed.");
             window.location.reload();
-         }
+    }
 
-    // function deleteCat(cat_id) {
-    //     if (confirm("Are you sure you want to delete this category?")) {
-    //         // Call a PHP script to delete the image
-    //         var xhr = new XMLHttpRequest();
-    //         xhr.open('POST', 'delete_cat.php', true);
-    //         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    //         xhr.onload = function() {
-    //             if (xhr.status === 200) {
-    //                 // Handle successful response from PHP script
-    //                 console.log(xhr.responseText);
-    //                 alert("Category deleted successfully!");
-    //                 location.reload(); // Reload the page to reflect changes
-    //             } else {
-    //                 // Handle error
-    //                 console.error('Request failed. Status: ' + xhr.status);
-    //                 alert("Failed to delete category. Please try again later.");
-    //             }
-    //         };
-    //         xhr.onerror = function() {
-    //             // Handle network error
-    //             console.error('Request failed. Network error.');
-    //         };
-    //         // Send the image_id to the PHP script for deletion
-    //         xhr.send('cat_id=' + cat_id);
-    //     }
-    // }
+    function toggleStatus(categoryId, currentStatus) {
+    var newStatus = currentStatus === '1' ? '0' : '1'; // Toggle status
+    // Send AJAX request to update status
+    $.ajax({
+        type: 'POST',
+        url: 'update_category_status.php',
+        data: JSON.stringify({ category_id: categoryId, new_status: newStatus }), // Match variable names
+        contentType: 'application/json', // Specify content type
+        dataType: 'json', // Expect JSON response
+        success: function(response) {
+            // Handle JSON response
+            if (response.status === 'success') {
+                console.log(response.message);
+                location.reload();
+                // Update UI or do something else
+            } else {
+                console.error(response.message);
+                // Handle error
+            }
+        },
+        error: function(xhr, status, error) {
+            // Handle error
+            console.error('Error:', xhr.responseText); // Log the full response text
+        }
+    });
+}
 
-    // function toggleStatus(categoryId, currentStatus) {
-    //     var newStatus = currentStatus === '1' ? '0' : '1'; // Toggle status
-    //     // Send AJAX request to update status
-    //     $.ajax({
-    //     type: 'POST',
-    //     url: 'update_category_status.php',
-    //     data: { category_id: categoryId, new_status: newStatus },
-    //     dataType: 'json', // Expect JSON response
-    //     success: function(response) {
-    //         // Handle JSON response
-    //         if (response.status === 'success') {
-    //             console.log(response.message);
-    //             // Update UI or do something else
-    //         } else {
-    //             console.error(response.message);
-    //             // Handle error
-    //         }
-    //     },
-    //     error: function(xhr, status, error) {
-    //         // Handle error
-    //         console.error(error);
-    //     }
-    //     });
 
-    // }
 
 
     </script>
