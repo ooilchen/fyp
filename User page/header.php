@@ -13,7 +13,7 @@
           include 'conn.php';
 
           // Fetch categories from the database
-          $query = "SELECT * FROM `category`";
+          $query =  "SELECT * FROM category WHERE status = '1'";
           $result = mysqli_query($conn, $query);
 
           // Check if there are any categories
