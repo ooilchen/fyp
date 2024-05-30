@@ -36,16 +36,16 @@
     <label for="confirm-password">Confirm Password</label>
     <input class="form-control mb-3" type="password" id="confirm-password" name="confirm-password" required>
 
-   <p>
+   <!-- <p>
     Register as: 
-    </p>
+    </p> -->
     
-    <div class="account-type">
+    <!-- <div class="account-type">
       <input type="radio" id="admin" name="accountType" value="admin">
       <label for="admin">Admin</label>
       <input type="radio" id="user" name="accountType" value="user" checked>
       <label for="user">User</label>
-    </div>
+    </div> -->
     
  
 

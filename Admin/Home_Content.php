@@ -1,3 +1,21 @@
+<?php
+
+    // Set session timeout to 30 minutes (1800 seconds)
+    ini_set('session.gc_maxlifetime', 180);
+    session_start();
+
+
+    // Redirect to login page if user is not logged in
+    if (!isset($_SESSION['username'])) {
+        header("Location: Sign_In.php");
+        exit();
+    }
+
+    include 'conn.php';
+
+    $conn->close();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +57,7 @@
                                 <li class="nav-item dropdown no-arrow">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['username'];?></span>
                                         <img class="img-profile rounded-circle"
                                             src="../images/undraw_Female_avatar_efig.png">
                                     </a>

@@ -1,3 +1,21 @@
+<?php
+
+    // Set session timeout to 30 minutes (1800 seconds)
+    ini_set('session.gc_maxlifetime', 180);
+    session_start();
+
+
+    // Redirect to login page if user is not logged in
+    if (!isset($_SESSION['username'])) {
+        header("Location: Sign_In.php");
+        exit();
+    }
+
+    include 'conn.php';
+
+    $conn->close();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,7 +59,7 @@
                                 <li class="nav-item dropdown no-arrow">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['username'];?></span>
                                         <img class="img-profile rounded-circle"
                                             src="../images/undraw_Female_avatar_efig.png">
                                     </a>
@@ -278,34 +296,6 @@
             
 
         return true; // Allow form submission
-    }
-
-    async function reply_click({
-			id,
-			status_cat
-		}) {
-
-            var newId = id.replace('switchbtn', '');
-            var newStatus;
-
-            var body = {
-               id: newId,
-               status_cat: newStatus
-			   }
-
-            rawResponse = await fetch('update_category_status.php', {
-				async: false,
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(body)
-			   });
-            const content = await rawResponse.json();
-
-            alert("Your status has been changed.");
-            window.location.reload();
     }
 
     function toggleStatus(categoryId, currentStatus) {

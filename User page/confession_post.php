@@ -9,7 +9,6 @@ if(isset($_GET['id'])) {
     echo '<p>No category ID provided</p>';
 }
 
-mysqli_close($conn);
 ?>
 
 
