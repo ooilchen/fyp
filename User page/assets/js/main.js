@@ -199,19 +199,46 @@ document.addEventListener('DOMContentLoaded', () => {
           xhr.open('POST', 'confession_add.php', true);
           xhr.onload = function() {
               if (xhr.status === 200) {
-                console.log(xhr.responseText);
-                alert("We have receive your confession. ");
-                location.reload(); 
+                try {
+                  var response = JSON.parse(xhr.responseText);
+                  if (response.success) {
+                      $('#newPost').modal('hide');
+                      showNotification('top', 'right', 'We have received your confession. Kindly wait for admin to approve your confession.', 'success');
+                      setTimeout(() => location.reload(), 4000);
+
+                  } else {
+                        console.error('Request failed. Status: ' + xhr.status);
+                        showNotification('top', 'right', 'Please try again later.', 'danger');
+                  }
+                } catch (e) {
+                    console.error('Invalid JSON response:', xhr.responseText);
+                    showNotification('top', 'right', 'An unexpected error occurred. Please try again later.', 'danger');
+                }
                     
               } else {
                   console.error('Request failed. Status: ' + xhr.status);
-                  alert("Please try again later.")
+                  showNotification('top', 'right', 'Please try again later.', 'danger');
               }
           };
           xhr.onerror = function() {
               console.error('Request failed. Network error.');
+              showNotification('top', 'right', 'Network error. Please try again later.', 'danger');
           };
           xhr.send(formData);
 
     return true;
+}
+
+  function showNotification(from, align, message, type) {
+    $.notify({
+      icon: "fas fa-check-circle",
+      message: message
+    }, {
+      type: type,
+      //timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
 }

@@ -83,12 +83,8 @@
                                             <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Settings
                                         </a>
-                                        <!-- <a class="dropdown-item" href="#">
-                                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Activity Log
-                                        </a> -->
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutConfirmationModal">
                                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Logout
                                         </a>
@@ -99,14 +95,31 @@
         
                         </nav>
                         <!-- End of Topbar -->
+
+                        <!-- Logout modal -->
+                        <div class="modal fade" id="logoutConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="logoutConfirmationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="logoutConfirmationModalLabel">Confirm Logout</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to logout?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" onclick="logout()">Logout</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
         
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-        
-                            <!-- Page Heading -->
-                            <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">Admin profile</h1>
-                            </div> -->
         
                             <div class="row">
                                 <div class="col-lg-12">
@@ -115,7 +128,7 @@
                                             <h6 class="m-0 font-weight-bold text-primary">Edit Profile</h6>
                                         </div>
                                         <div class="card-body">
-                                            <form method="POST" action="">
+                                            <form id="editProfileForm" method="POST" enctype="multipart/form-data">
                                                 <div class="form-group">
                                                     <label for="profile_pic">Profile Picture</label>
                                                     <div class="mb-3">
@@ -126,14 +139,22 @@
                                                         <input type="file" class="form-control" id="profile_pic" name="profile_pic" accept=".jpg, .jpeg, .png, .gif">
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group">
+                                                    <label for="useid">User ID</label>
+                                                    <input type="text" class="form-control" id="userid" name="userid" value="<?php echo htmlspecialchars($user['user_id']); ?>" disabled>
+                                                </div>
+
                                                 <div class="form-group">
                                                     <label for="username">Username</label>
                                                     <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label for="email">Email</label>
                                                     <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label for="password">New Password</label>
                                                     <input type="password" class="form-control" id="password" name="password" required>
@@ -182,6 +203,10 @@
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- Bootstrap Notify -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@latest/dist/bootstrap-notify.min.js"></script>
+
+
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
 
@@ -189,6 +214,64 @@
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
     <script src="js/demo/chart-bar-demo.js"></script>
+
+    <script>
+
+    document.getElementById('editProfileForm').addEventListener('submit', function (event) {
+        event.preventDefault(); 
+        
+        // Fetch the form data
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        // Perform client-side validation
+        const password = formData.get('password');
+        const confirmPassword = formData.get('confirmpassword');
+        
+        if (password !== confirmPassword) {
+            showNotification('top', 'right', 'Passwords do not match', 'warning');
+            return;
+        } for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+
+
+        // If validation passes, send the data using AJAX
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'profile_update.php', true); // Update the URL as needed
+        
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                alert('Profile updated successfully.');
+                console.log(xhr.status);
+                // Optionally, redirect or update the page content
+            } else {
+                alert('An error occurred while updating the profile.');
+            }
+        };
+        
+        xhr.onerror = function () {
+            alert('An error occurred while sending the request.');
+        };
+        
+        xhr.send(formData);
+    });
+
+    function showNotification(from, align, message, type) {
+    $.notify({
+      icon: "fas fa-check-circle",
+      message: message
+    }, {
+      type: type,
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
+}
+
+    </script>
 
 </body>
 </html>

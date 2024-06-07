@@ -186,7 +186,7 @@ if(isset($_GET['id'])) {
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <!-- Bootstrap Notify -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@latest/dist/bootstrap-notify.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@latest/dist/bootstrap-notify.min.js"></script>
 
   
 
@@ -232,24 +232,6 @@ if(isset($_GET['id'])) {
     }
 });
 
-
-// <!-- Bootstrap Notify -->
-
-// function showNotification(from, align){
-
-//   $.notify({
-//       icon: "add_alert",
-//       message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
-
-//   },{
-//       type: 'success',
-//       timer: 4000,
-//       placement: {
-//           from: from,
-//           align: align
-//       }
-//   });
-// }
 
 
   </script>

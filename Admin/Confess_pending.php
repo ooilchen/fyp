@@ -210,6 +210,9 @@
     <!-- Datatables -->
     <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
 
+    <!-- Bootstrap Notify -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@latest/dist/bootstrap-notify.min.js"></script>
+
 
 
 <script>
@@ -239,13 +242,15 @@
             success: function (response) {
                 // Handle success response
                 console.log(response);
+                showNotification('top', 'right', 'Content approved successfully.', 'success');
+                setTimeout(() => location.reload(), 4000);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Handle error
                 console.error(textStatus, errorThrown);
+                showNotification('top', 'right', 'Error approving content.', 'danger');
             }
             });
-                console.log('Selected IDs for approve:', selectedIds);
             });
 
 
@@ -268,15 +273,36 @@
             success: function (response) {
                 // Handle success response
                 console.log(response);
+                showNotification('top', 'right', 'Content deleted successfully.', 'success');
+                setTimeout(() => location.reload(), 4000);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // Handle error
                 console.error(textStatus, errorThrown);
+                showNotification('top', 'right', 'Error deleting content.', 'danger');
             }
             });
                 
                 console.log('Selected IDs for delete:', selectedIds);
             });
+
+/*--------------------------------------------------------------
+# Notification
+--------------------------------------------------------------*/
+
+        function showNotification(from, align, message, type) {
+            $.notify({
+            icon: "fas fa-check-circle",
+            message: message
+            }, {
+            type: type,
+            //timer: 4000,
+            placement: {
+                from: from,
+                align: align
+            }
+            });
+        }
 
 
 </script>
