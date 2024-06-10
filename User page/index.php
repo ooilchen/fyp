@@ -1,4 +1,17 @@
-<?php include 'conn.php'; ?>
+<?php
+  // Start the session
+  session_start();
+
+  // Check if the user is already logged in
+  // if(isset($_SESSION["user_id"])) {
+  //     // If logged in, you may want to redirect them to the dashboard or another authorized page
+  //     header("Location: /dashboard.php"); // Replace "/dashboard.php" with your actual dashboard URL
+  //     exit();
+  // }
+
+  // Include the header file which contains navigation links, etc.
+  include 'header.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 

@@ -79,9 +79,6 @@
       </nav><!-- .navbar -->
 
       <div class="position-relative">
-        <a href="#" class="mx-2"><span class="bi-facebook"></span></a>
-        <a href="#" class="mx-2"><span class="bi-twitter"></span></a>
-        <a href="#" class="mx-2"><span class="bi-instagram"></span></a>
 
         <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
         <i class="bi bi-list mobile-nav-toggle"></i>
@@ -127,10 +124,6 @@
                 <img src="assets/img/post-landscape-5.jpg" alt="" class="img-fluid">
                 <figcaption>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, odit? </figcaption>
               </figure>
-              <p>Quis molestiae, dolorem consequuntur labore perferendis enim accusantium commodi optio, sequi magnam ad consectetur iste omnis! Voluptatibus, quia officia esse necessitatibus magnam tempore reprehenderit quo aspernatur! Assumenda, minus dolorem repellendus corporis corrupti quia temporibus repudiandae in. Sit rem aut, consectetur repudiandae perferendis nemo alias, iure ipsam omnis quam soluta, nobis animi quis aliquam blanditiis at. Dicta nemo vero sequi exercitationem.</p>
-              <p>Architecto ex id at illum aperiam corporis, quidem magnam doloribus non eligendi delectus laborum porro molestiae beatae eveniet dolor odit optio soluta dolores! Eaque odit a nihil recusandae, error repellendus debitis ex autem ab commodi, maiores officiis doloribus provident optio, architecto assumenda! Nihil cum laboriosam eos dolore aliquid perferendis amet doloremque quibusdam odio soluta vero odit, ipsa, quisquam quod nulla.</p>
-              <p>Consequuntur corrupti fugiat quod! Ducimus sequi nemo illo ad necessitatibus amet nobis corporis et quasi. Optio cum neque fuga. Ad excepturi magnam quisquam ex voluptatibus vitae aut nam quidem doloribus, architecto perspiciatis sit consequatur pariatur alias animi expedita quas? Et doloribus voluptatibus perferendis qui fugiat voluptatum autem facere aspernatur quidem quae assumenda iste, sit similique, necessitatibus laborum magni. Ea, dolores!</p>
-              <p>Possimus temporibus rerum illo quia repudiandae provident sed quas atque. Ipsam adipisci accusamus iste optio illo aliquam molestias? Voluptatibus, veniam recusandae facilis nobis perspiciatis rem similique, nisi ad explicabo ipsa voluptatum, inventore molestiae natus adipisci? Fuga delectus quia assumenda totam aspernatur. Nobis hic ea rem, quaerat voluptate vero illum laboriosam omnis aspernatur labore, natus ex iusto ducimus exercitationem a officia.</p>
             </div><!-- End Single Post Content -->
 
             <!-- ======= Comments ======= -->
@@ -373,16 +366,6 @@
             </div>
 
             <div class="aside-block">
-              <h3 class="aside-title">Video</h3>
-              <div class="video-post">
-                <a href="https://www.youtube.com/watch?v=AiFfDjmd0jU" class="glightbox link-video">
-                  <span class="bi-play-fill"></span>
-                  <img src="assets/img/post-landscape-5.jpg" alt="" class="img-fluid">
-                </a>
-              </div>
-            </div><!-- End Video -->
-
-            <div class="aside-block">
               <h3 class="aside-title">Categories</h3>
               <ul class="aside-links list-unstyled">
                 <li><a href="category.html"><i class="bi bi-chevron-right"></i> Business</a></li>
@@ -396,19 +379,6 @@
               </ul>
             </div><!-- End Categories -->
 
-            <div class="aside-block">
-              <h3 class="aside-title">Tags</h3>
-              <ul class="aside-tags list-unstyled">
-                <li><a href="category.html">Business</a></li>
-                <li><a href="category.html">Culture</a></li>
-                <li><a href="category.html">Sport</a></li>
-                <li><a href="category.html">Food</a></li>
-                <li><a href="category.html">Politics</a></li>
-                <li><a href="category.html">Celebrity</a></li>
-                <li><a href="category.html">Startups</a></li>
-                <li><a href="category.html">Travel</a></li>
-              </ul>
-            </div><!-- End Tags -->
 
           </div>
         </div>

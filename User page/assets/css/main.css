@@ -1398,8 +1398,6 @@ li a:hover {
 }
 
 
-
-
 /*--------------------------------------------------------------
 # Sign_up
 --------------------------------------------------------------*/
@@ -1419,53 +1417,47 @@ li a:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 400px;
 }
-/* h2 {
-  text-align: center;
-}
-form {
-  display: flex;
-  flex-direction: column;
-}
-label {
-  margin-top: 10px;
-}
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-} */
+
 .account-type {
   margin: 10px 0;
 }
-/* button[type="submit"],
-button[type="button"] {
-  background-color: #5cb85c;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-button[type="submit"]:hover,
-button[type="button"]:hover {
-  background-color: #4cae4c;
-} */
+
 .login-section {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
 }
-/* a {
-  color: #337ab7;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-} */
-
 .error { color: red; }
   .success { color: green; }
+
+/*--------------------------------------------------------------
+# Sign_In
+--------------------------------------------------------------*/
+
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: var(--font-primary);
+    background-color: var(--color-secondary-light);
+}
+.login-container {
+    padding: 40px; 
+    width: 400px;
+    background-color: #fff; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="submit"]:hover {
+    background-color: #6495ED;
+}
+.login-links {
+    text-align: center;
+    margin-top: 20px;
+}
+.admin-link {
+    display: block; 
+    text-align: center;
+    margin-top: 20px;
+}
