@@ -27,7 +27,8 @@
         </form>
         <div class="login-links">
             <a href="/forgot-password">Forgot password?</a> | 
-            <a href="signup.php">Signup</a>
+            <a href="signup.php">Signup</a> |
+            <a href="index.php">Homepage</a>
         </div>
         <div class="admin-link">
             <a href="../Admin/Sign_in.php">Login as Admin</a>
@@ -38,12 +39,10 @@
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault(); 
 
-            // Clear previous error message
             document.getElementById('error-message').innerHTML = '';
 
             const formData = new FormData(this);
 
-            // Send login data to server for validation
             fetch('login.php', {
                 method: 'POST',
                 body: formData
@@ -51,10 +50,10 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Login successful, redirect to user dashboard or homepage
+                    
                     window.location.href = 'Index.php'; 
                 } else {
-                    // Login failed, display error message
+                    
                     document.getElementById('error-message').innerHTML = data.message;
                 }
             })

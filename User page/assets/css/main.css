@@ -462,9 +462,16 @@ section {
 /*--------------------------------------------------------------
 # Posts
 --------------------------------------------------------------*/
+
 .post-entry-1 {
+  overflow: hidden;
   margin-bottom: 30px;
 }
+
+.post-entry-1 a:hover {
+  text-decoration: none;
+}
+
 
 .post-entry-1 img {
   margin-bottom: 30px;

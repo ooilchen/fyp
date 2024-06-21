@@ -89,8 +89,9 @@
 
         setTimeout(() => {
         responseMessage.innerHTML = '';
+        window.location.href = 'signin.php';
         }, 3000); // 3 seconds delay before clearing the message
-        window.location.href = 'user_login.php';
+        
       } else {
         responseMessage.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
       }

@@ -1,17 +1,11 @@
 <?php
-  // Start the session
-  session_start();
 
-  // Check if the user is already logged in
-  // if(isset($_SESSION["user_id"])) {
-  //     // If logged in, you may want to redirect them to the dashboard or another authorized page
-  //     header("Location: /dashboard.php"); // Replace "/dashboard.php" with your actual dashboard URL
-  //     exit();
-  // }
+session_start();
 
-  // Include the header file which contains navigation links, etc.
-  include 'header.php';
+
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +44,7 @@
 
 <body>
 
-<?php include 'header.php';?>
+  <?php include 'header.php';?>
 
     <main id="main">
 
@@ -111,11 +105,13 @@
         </div>
       </section><!-- End Hero Slider Section -->
 
-      <!-- ======= Announcement by admin Section ======= -->
+      
       <section id="posts" class="posts">
         <div class="container" data-aos="fade-up">
           <div class="row g-5">
             <div class="col-lg-4">
+
+              <!-- ======= Announcement by admin Section ======= -->
               <div class="post-entry-1 lg">
                 <a ><img src="<?php echo htmlspecialchars($announcement_img); ?>" alt="" class="img-fluid"></a>
                 <div class="post-meta">  <span>Updated on <?php echo htmlspecialchars($date_announce); ?></span></div>
@@ -129,61 +125,87 @@
                   </div>
                 </div>
               </div>
+              <!-- End Announcement by admin Section -->
 
+                <div class="aside-block">
+                <h3 class="aside-title">Categories</h3>
+                <ul class="aside-links list-unstyled">
+
+                  <?php
+
+                    include 'conn.php';
+
+                    $query = "SELECT category_id, category_name FROM category WHERE status = 1";
+                    $result = mysqli_query($conn, $query);
+                    if ($result && mysqli_num_rows($result) > 0) {
+                      while ($row = mysqli_fetch_assoc($result)) {
+                        $category_id = $row['category_id'];
+                        $category_name = $row['category_name'];
+                        echo '<li><a href="Confession_post.php?id=' . htmlspecialchars($category_id) . '"><i class="bi bi-chevron-right"></i> ' . htmlspecialchars($category_name) . '</a></li>';
+                      }
+                    } else {
+                      echo "<li>No categories found.</li>";
+                    }
+                  ?>
+                </ul>
+              </div><!-- End Categories -->
             </div>
 
             <div class="col-lg-8">
               <div class="row g-5">
+                <h3>Latest confession</h3>
                 <div class="col-lg-4 border-start custom-border">
-                  <div class="post-entry-1">
-                    <a href="single-post.html"><img src="assets/img/post-landscape-2.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2><a href="single-post.html">Let’s Get Back to Work, New York</a></h2>
-                  </div>
-                  <div class="post-entry-1">
-                    <a href="single-post.html"><img src="assets/img/post-landscape-5.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Food</span> <span class="mx-1">&bullet;</span> <span>Jul 17th '22</span></div>
-                    <h2><a href="single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                  </div>
-                  <div class="post-entry-1">
-                    <a href="single-post.html"><img src="assets/img/post-landscape-7.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Design</span> <span class="mx-1">&bullet;</span> <span>Mar 15th '22</span></div>
-                    <h2><a href="single-post.html">Why Craigslist Tampa Is One of The Most Interesting Places On the Web?</a></h2>
-                  </div>
-                </div>
-                <div class="col-lg-4 border-start custom-border">
-                  <div class="post-entry-1">
-                    <a href="single-post.html"><img src="assets/img/post-landscape-3.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2><a href="single-post.html">6 Easy Steps To Create Your Own Cute Merch For Instagram</a></h2>
-                  </div>
-                  <div class="post-entry-1">
-                    <a href="single-post.html"><img src="assets/img/post-landscape-6.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Tech</span> <span class="mx-1">&bullet;</span> <span>Mar 1st '22</span></div>
-                    <h2><a href="single-post.html">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
-                  </div>
-                  <div class="post-entry-1">
-                    <a href="single-post.html"><img src="assets/img/post-landscape-8.jpg" alt="" class="img-fluid"></a>
-                    <div class="post-meta"><span class="date">Travel</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                    <h2><a href="single-post.html">5 Great Startup Tips for Female Founders</a></h2>
-                  </div>
+                    <?php
+                    include 'conn.php';
+
+                    $sql = "SELECT c.*, cat.category_name
+                            FROM content c
+                            JOIN category cat ON c.category_id = cat.category_id
+                            WHERE c.content_status = 1
+                            ORDER BY c.category_id DESC
+                            LIMIT 6";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        $count = 0;
+                        while($row = $result->fetch_assoc()) {
+                            $content_id = $row["content_id"];
+                            $date_created = $row["date_created"];
+                            $category_name = $row["category_name"];
+                            $content = $row["content"];
+                            $image = $row["image"];
+
+                            echo '<div class="post-entry-1">';
+                            echo '<a href="single-post.php?id='.$content_id.'"><img src="' . $image . '" alt="" class="img-fluid"></a>';
+                            echo '<div class="post-meta"><span class="date">' . $category_name . '</span> <span class="mx-1">&bullet;</span> <span>' . $date_created . '</span></div>';
+                            echo '<h2><a href="single-post.php?id='.$content_id.'">' . $content . '</a></h2>';
+                            echo '</div>';
+
+                            $count++;
+
+                            if ($count % 3 == 0 && $count != 6) {
+                                echo '</div><div class="col-lg-4 border-start custom-border">';
+                            }
+                        }
+                    } else {
+                        echo "0 results";
+                    }
+
+                    $conn->close();
+                    ?>
                 </div>
 
                 <!-- Latest Section -->
                 <div class="col-lg-4">
 
                   <div class="trending">
-                    <h3>Latest</h3>
+                    <h3>Trending</h3>
                     <ul class="trending-post">
                       <?php
                         include 'conn.php';
 
                         // Execute SQL query to fetch latest content
-                        $sql = "SELECT `content_id`, `date_created`, `category_id`, `content`, `content_status`, `image`
-                                FROM `content`
-                                WHERE `content_status` = 1
-                                ORDER BY `date_created` DESC
-                                LIMIT 5";
+                        $sql = "SELECT * FROM content ORDER BY like_count DESC LIMIT 4";
 
                         $result = $conn->query($sql);
 
@@ -191,7 +213,7 @@
                           // Output data of each row
                           while ($row = $result->fetch_assoc()) {
                             echo "<li>";
-                            echo "<a href='single-post.html'>";
+                            echo "<a href='single-post.php?id=".$row['content_id']."'>";
                             echo "<span class='number'>" . $row['content_id'] . "</span>";
                             echo "<h3>" . $row['content'] . "</h3>";
                             // Add more elements to display as needed
@@ -206,14 +228,15 @@
                       ?>
                     </ul>
                   </div>
-
-                </div> <!-- End Trending Section -->
+                 
+                </div> <!-- End Latest Section -->
+                
               </div>
             </div>
 
           </div> <!-- End .row -->
         </div>
-      </section> <!-- End Announcement by admin Section -->
+      </section> 
 
 
 
@@ -223,7 +246,6 @@
     <!--Add confession modal-->
     <div class="modal" tabindex="-1" role="dialog" id="newPost">
         <div class="modal-dialog modal-xl" role="document">
-            <!-- <form method = 'POST' enctype='multipart/form-data' action="test_addConfession.php"> -->
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title">Write your confession</h5>
@@ -277,7 +299,6 @@
                     <button type="submit" id="new_confess" class="btn btn-primary" onclick="validateForm()">Submit</button>
                 </div>
               </div>
-            <!-- </form> -->
         </div>
     </div>   
     <!--End of modal-->
@@ -286,7 +307,6 @@
   <footer id="footer" class="footer">
 
     <div class="footer-legal">
-      <!-- <div class="container"> -->
 
         <div class="row justify-content-between">
           <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
@@ -296,7 +316,6 @@
           </div>
         </div>
 
-      <!-- </div> -->
     </div>
 
   </footer>

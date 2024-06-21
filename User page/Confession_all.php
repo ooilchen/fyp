@@ -1,3 +1,15 @@
+<?php
+  session_start();
+  $user_id= $_SESSION['user_id'];
+  include 'conn.php';
+
+  if(isset($_GET['id'])) {
+      $rawId = $_GET['id']; 
+  } else {
+      echo '<p>No category ID provided</p>';
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,7 +53,6 @@
   <!-- ======= Header ======= -->
   <?php include 'header.php';?>
   <!-- End Header -->
-
 
     <main id="main">
       <div data-aos="fade-up">
@@ -127,14 +138,6 @@
               © Copyright <strong><span>Unimas Confession 23/24</span></strong>. All Rights Reserved
             </div>
 
-            <!-- <div class="credits">
-              All the links in the footer should remain intact.
-              You can delete the links only if you purchased the pro version.
-              Licensing information: https://bootstrapmade.com/license/
-              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/herobiz-bootstrap-business-template/
-              Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-            </div> -->
-
           </div>
 
         </div>
@@ -171,58 +174,92 @@
   
 
   <script>
-
-document.addEventListener('DOMContentLoaded', function() {
-      fetch('fetch_all.php')
+    document.addEventListener('DOMContentLoaded', function() {
+    fetch('fetch_all.php') // Fetch all confessions endpoint
         .then(response => response.json())
         .then(contentArray => {
-          const contentContainer = document.getElementById('content-container');
-          contentContainer.innerHTML = ''; // Clear existing content
+            const contentContainer = document.getElementById('content-container');
+            contentContainer.innerHTML = ''; // Clear existing content
 
-          contentArray.forEach(content => {
-            const contentCard = document.createElement('div');
-            contentCard.classList.add('content');
+            contentArray.forEach(content => {
+                const contentCard = document.createElement('div');
+                contentCard.classList.add('content');
 
-            contentCard.innerHTML = `
-              <div class="card mb-3">
-                <div class="card-body">
-                  <p>${content.content}</p>
-                  <p><small>${content.date_created} #${content.category_name}</small></p>
-                  ${content.image ? `<img src="${content.image}" alt="Content Image" class="img-fluid">` : ''}
-                </div>
-                <div class="card-footer">
-                  <button class="btn btn-like" data-id="${content.content_id}">Like <i class="fas fa-thumbs-up"></i></button>
-                  <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
-                </div>
-              </div>
-            `;
+                contentCard.innerHTML = `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <a href="single-post.php?id=${content.content_id}" style="text-decoration: none; color: inherit;">
+                                <p>${content.content}</p>
+                                <p><small>${content.date_created} #${content.category_name}</small></p>
+                                ${content.image ? `<img src="${content.image}" alt="Content Image" class="img-fluid">` : ''}
+                            </a>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-like ${content.is_liked ? 'liked' : ''}" data-id="${content.content_id}">
+                                ${content.is_liked ? 'Unlike' : 'Like'} 
+                                <i class="fas fa-thumbs-${content.is_liked ? 'down' : 'up'}"></i> 
+                                <span class="like-count">${content.like_count || 0}</span>
+                            </button>
+                            <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
+                        </div>
+                    </div>
+                `;
 
-            contentContainer.appendChild(contentCard);
-          });
+                contentContainer.appendChild(contentCard);
+            });
+
+            attachEventListeners();
         })
         .catch(error => {
-          console.error('Error fetching content:', error);
+            console.error('Error fetching content:', error);
         });
-    });
 
-// <!-- Bootstrap Notify -->
+    function attachEventListeners() {
+        const likeButtons = document.querySelectorAll('.btn-like');
 
-// function showNotification(from, align){
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const contentId = this.getAttribute('data-id');
+                const likeCountSpan = this.querySelector('.like-count');
+                const isLiked = this.classList.contains('liked'); 
 
-//   $.notify({
-//       icon: "add_alert",
-//       message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
-
-//   },{
-//       type: 'success',
-//       timer: 4000,
-//       placement: {
-//           from: from,
-//           align: align
-//       }
-//   });
-// }
-
+                const endpoint = isLiked ? 'post_unlike.php' : 'post_like.php'; // 
+                fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content_id: contentId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        likeCountSpan.textContent = data.new_like_count;
+                        this.classList.toggle('liked'); 
+                        this.innerHTML = `${this.classList.contains('liked') ? 'Unlike' : 'Like'} <i class="fas fa-thumbs-${this.classList.contains('liked') ? 'down' : 'up'}"></i> <span class="like-count">${data.new_like_count}</span>`;
+                    } else if (data.message === 'User not logged in') {
+                        // Notify user to log in
+                        $.notify({
+                            message: 'Please log in to like this post.'
+                        },{
+                            type: 'primary',
+                            delay: 2000,
+                            placement: {
+                                from: "top",
+                                align: "center"
+                            }
+                        });
+                    } else {
+                        console.error('Error liking the post:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    }
+});
 
   </script>
 

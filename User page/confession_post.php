@@ -1,12 +1,31 @@
 <?php
-  session_start();
-  include 'conn.php';
 
-  if(isset($_GET['id'])) {
-      $rawId = $_GET['id']; 
-  } else {
-      echo '<p>No category ID provided</p>';
-  }
+include 'conn.php';
+
+session_start();
+
+if (isset($_GET['id'])) {
+    $category_id = $_GET['id'];
+
+    // Get the category name based on the category ID
+    $query = "SELECT category_name FROM category WHERE category_id = ? AND status = 1";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $category_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $category = $result->fetch_assoc();
+        $category_name = $category['category_name'];
+    } else {
+        echo '<p>Invalid category ID or category not active</p>';
+        exit;
+    }
+} else {
+    echo '<p>No category ID provided</p>';
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -37,17 +56,24 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 <body>
-  <?php include 'header.php';?>
+
+  <!-- ======= Header ======= -->
+  <?php include 'header.php'; ?>
+  <!-- End Header -->
+
   <main id="main">
     <div data-aos="fade-up">
-      <h2 class="ms-4"><?php echo $rawId ?></h2>
+      <h2 class="ms-4"><?php echo $category_name ?></h2>
       <div id="content-container" class="content-container"></div>
     </div>
   </main>
 
+  <!--Add confession modal-->
   <div class="modal" tabindex="-1" role="dialog" id="newPost">
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
@@ -166,7 +192,11 @@
                             </a>
                           </div>
                           <div class="card-footer">
-                              <button class="btn btn-like" data-id="${content.content_id}">Like <i class="fas fa-thumbs-up"></i> <span class="like-count">${content.like_count || 0}</span></button>
+                              <button class="btn btn-like ${content.is_liked ? 'liked' : ''}" data-id="${content.content_id}">
+                                ${content.is_liked ? 'Unlike' : 'Like'} 
+                                <i class="fas fa-thumbs-${content.is_liked ? 'down' : 'up'}"></i> 
+                                <span class="like-count">${content.like_count || 0}</span>
+                              </button>
                               <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
                           </div>
                       `;
@@ -189,7 +219,11 @@
           likeButtons.forEach(button => {
               button.addEventListener('click', function() {
                   const contentId = this.getAttribute('data-id');
-                  fetch('like_post.php', {
+                  const likeCountSpan = this.querySelector('.like-count');
+                  const isLiked = this.classList.contains('liked'); 
+
+                  const endpoint = isLiked ? 'post_unlike.php' : 'post_like.php'; // 
+                  fetch(endpoint, {
                       method: 'POST',
                       headers: {
                           'Content-Type': 'application/json'
@@ -199,11 +233,20 @@
                   .then(response => response.json())
                   .then(data => {
                       if (data.success) {
-                          const likeCountSpan = this.querySelector('.like-count');
                           likeCountSpan.textContent = data.new_like_count;
+                          this.classList.toggle('liked'); 
+                          this.innerHTML = `${this.classList.contains('liked') ? 'Unlike' : 'Like'} <i class="fas fa-thumbs-${this.classList.contains('liked') ? 'down' : 'up'}"></i> <span class="like-count">${data.new_like_count}</span>`;
                       } else if (data.message === 'User not logged in') {
-                          alert('You need to log in to like posts.');
-                          window.location.href = 'signin.php';
+                          $.notify({
+                              message: 'Please log in to like this post.'
+                          },{
+                              type: 'primary',
+                              delay: 2000,
+                              placement: {
+                                  from: "top",
+                                  align: "center"
+                              }
+                          });
                       } else {
                           console.error('Error liking the post:', data.message);
                       }
