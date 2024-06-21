@@ -40,6 +40,7 @@
         <li><a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#newPost">Add Confession</a></li>
         <!-- <li><a href="about.html">About</a></li> -->
         <li><a href="contact.html">Sign up/Sign in</a></li>
+        <li><a href="logout.php">Sign out</a></li>
       </ul>
     </nav><!-- .navbar -->
 

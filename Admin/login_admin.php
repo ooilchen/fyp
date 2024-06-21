@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt = $conn->prepare("SELECT * FROM `admin` WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $hashed_password)) {
             session_start();
             $_SESSION['email'] = $email;
-            $_SESSION['username'] = $row['username'];
+            $_SESSION['username'] = $row['admin_username'];
             header("Location: Index.php");
             exit();
         } else {

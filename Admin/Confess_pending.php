@@ -115,12 +115,12 @@
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>Checkbox</th>
-                                                    <th>Content ID</th>
+                                                    <!-- <th>Content ID</th> -->
                                                     <th>Category</th>
                                                     <th>Content</th>
                                                     <th>Image</th>
                                                     <th>Date</th>
+                                                    <th><input type="checkbox" id="checkAll">Select All</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -141,12 +141,12 @@
                                                         // Output data into the HTML table
                                                         while ($row = $result->fetch_assoc()) {
                                                             echo "<tr>";
-                                                            echo "<td><input class='form-check-input' type='checkbox' name='content_id[]' value='" . $row["content_id"] . "'></td>";
-                                                            echo "<td>" . $row["content_id"] . "</td>";
+                                                            
                                                             echo "<td>" . $row["category_name"] . "</td>";
                                                             echo "<td>" . $row["content"] . "</td>";
                                                             echo "<td><a href='" . $row["image"] . "' target='_blank'>" . $row["image"] . "</a></td>";
                                                             echo "<td>" . $row["date_created"] . "</td>";
+                                                            echo "<td><input class='form-check-input' type='checkbox' name='content_id[]' value='" . $row["content_id"] . "'></td>";
                                                             echo "</tr>";
                                                         }
                                                     } else {
@@ -303,6 +303,14 @@
             }
             });
         }
+
+/*--------------------------------------------------------------
+# Check All
+--------------------------------------------------------------*/
+
+        $('#checkAll').on('click', function() {
+            $('input[name="content_id[]"]').prop('checked', this.checked);
+        });
 
 
 </script>

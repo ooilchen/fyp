@@ -143,114 +143,79 @@
 
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const categoryId = urlParams.get('id');
+      const urlParams = new URLSearchParams(window.location.search);
+      const categoryId = urlParams.get('id');
 
-    if (categoryId) {
-        fetch(`fetch_content.php?id=${categoryId}`)
-            .then(response => response.json())
-            .then(contentArray => {
-                const contentContainer = document.getElementById('content-container');
-                contentContainer.innerHTML = ''; // Clear existing content
+      if (categoryId) {
+          fetch(`fetch_content.php?id=${categoryId}`)
+              .then(response => response.json())
+              .then(contentArray => {
+                  const contentContainer = document.getElementById('content-container');
+                  contentContainer.innerHTML = ''; // Clear existing content
 
-                contentArray.forEach(content => {
-                    const contentCard = document.createElement('div');
-                    contentCard.classList.add('content');
+                  contentArray.forEach(content => {
+                      const contentCard = document.createElement('div');
+                      contentCard.classList.add('content');
 
-                    contentCard.innerHTML = `
-                            <div class="card-body">
-                              <a href="single-post.php?id=${content.content_id}" style="text-decoration: none; color: inherit;">
-                                <p>${content.content}</p>
-                                <p><small>${content.date_created} #${content.category_name}</small></p>
-                                ${content.image ? `<img src="${content.image}" alt="Content Image" class="img-fluid">` : ''}
-                              </a>
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn btn-like" data-id="${content.content_id}">Like <i class="fas fa-thumbs-up"></i></button>
-                                <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
-                            </div>
-                    `;
+                      contentCard.innerHTML = `
+                          <div class="card-body">
+                            <a href="single-post.php?id=${content.content_id}" style="text-decoration: none; color: inherit;">
+                              <p>${content.content}</p>
+                              <p><small>${content.date_created} #${content.category_name}</small></p>
+                              ${content.image ? `<img src="${content.image}" alt="Content Image" class="img-fluid">` : ''}
+                            </a>
+                          </div>
+                          <div class="card-footer">
+                              <button class="btn btn-like" data-id="${content.content_id}">Like <i class="fas fa-thumbs-up"></i> <span class="like-count">${content.like_count || 0}</span></button>
+                              <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
+                          </div>
+                      `;
 
-                    contentContainer.appendChild(contentCard);
-                });
+                      contentContainer.appendChild(contentCard);
+                  });
 
-                attachEventListeners();
-            })
-            .catch(error => {
-                console.error('Error fetching content:', error);
-            });
-    } else {
-        console.error('No category ID provided');
-    }
+                  attachEventListeners();
+              })
+              .catch(error => {
+                  console.error('Error fetching content:', error);
+              });
+      } else {
+          console.error('No category ID provided');
+      }
 
-    function attachEventListeners() {
-        // Select all like buttons
-        const likeButtons = document.querySelectorAll('.btn-like');
+      function attachEventListeners() {
+          const likeButtons = document.querySelectorAll('.btn-like');
 
-        // Check if any like buttons are found
-        console.log('Like buttons found:', likeButtons.length);
-
-        likeButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const postId = this.getAttribute('data-id');
-                
-                // Debugging statement to check the postId
-                console.log('Like button clicked, postId:', postId);
-
-                // Check if user is logged in
-                const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
-                if (!isLoggedIn) {
-                    //alert('Please log in to like posts.');
-                    alertUser('top','right');
-                }
-
-                fetch('like_post.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ postId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Post liked successfully!');
-                    } else {
-                        alert('Error liking post.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error liking post:', error);
-                });
-            });
-        });
-
-        // Select all comment buttons
-        const commentButtons = document.querySelectorAll('.btn-comment');
-        commentButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const postId = this.getAttribute('data-id');
-                window.location.href = `single-post.php?id=${postId}#comments`;
-            });
-        });
-    }
+          likeButtons.forEach(button => {
+              button.addEventListener('click', function() {
+                  const contentId = this.getAttribute('data-id');
+                  fetch('like_post.php', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({ content_id: contentId })
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          const likeCountSpan = this.querySelector('.like-count');
+                          likeCountSpan.textContent = data.new_like_count;
+                      } else if (data.message === 'User not logged in') {
+                          alert('You need to log in to like posts.');
+                          window.location.href = 'signin.php';
+                      } else {
+                          console.error('Error liking the post:', data.message);
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Error:', error);
+                  });
+              });
+          });
+      }
   });
 
-  function alertUser(from, align){
-
-$.notify({
-    icon: "add_alert",
-    message: "Please log in to interact with others"
-
-},{
-    type: 'warning',
-    timer: 4000,
-    placement: {
-        from: from,
-        align: align
-    }
-});
-}
   </script>
 </body>
 </html>

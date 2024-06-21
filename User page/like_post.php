@@ -1,25 +1,79 @@
 <?php
 session_start();
+include 'conn.php';
 
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['success' => false, 'message' => 'User not logged in']);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'User not logged in'
+        ]);
+        exit();
+    }
 
-$userId = $_SESSION['user_id'];
-$postId = json_decode(file_get_contents('php://input'), true)['postId'];
-$likeId = uniqid('like-', true);
+    $data = json_decode(file_get_contents('php://input'), true);
+    $contentId = $data['content_id'];
+    $userId = $_SESSION['user_id'];
 
+    if ($contentId) {
+        // Check if user already liked the post
+        $query = "SELECT * FROM user_likes WHERE user_id = ? AND content_id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ss", $userId, $contentId);
+        $stmt->execute();
+        $stmt->store_result();
 
-include('conn.php');
+        if ($stmt->num_rows > 0) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'User already liked this post'
+            ]);
+        } else {
+            // Update the like count in the database
+            $query = "UPDATE content SET like_count = like_count + 1 WHERE content_id = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("s", $contentId);
 
-$sql = "INSERT INTO likes (like_id, content_id, user_id) VALUES ('$likeId', '$postId', '$userId')";
+            if ($stmt->execute()) {
+                // Insert into user_likes table
+                $query = "INSERT INTO user_likes (user_id, content_id) VALUES (?, ?)";
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("ss", $userId, $contentId);
+                $stmt->execute();
 
-if ($conn->query($sql) === TRUE) {
-    echo json_encode(['success' => true]);
+                // Retrieve the new like count
+                $query = "SELECT like_count FROM content WHERE content_id = ?";
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param("s", $contentId);
+                $stmt->execute();
+                $stmt->bind_result($newLikeCount);
+                $stmt->fetch();
+
+                echo json_encode([
+                    'success' => true,
+                    'new_like_count' => $newLikeCount
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Error updating like count'
+                ]);
+            }
+        }
+        $stmt->close();
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Invalid content ID'
+        ]);
+    }
 } else {
-    echo json_encode(['success' => false, 'message' => $conn->error]);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid request method'
+    ]);
 }
 
 $conn->close();
+
 ?>

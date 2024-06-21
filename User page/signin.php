@@ -44,7 +44,7 @@
             const formData = new FormData(this);
 
             // Send login data to server for validation
-            fetch('user-login.php', {
+            fetch('login.php', {
                 method: 'POST',
                 body: formData
             })
