@@ -184,6 +184,7 @@ if (isset($_GET['id'])) {
                       contentCard.classList.add('content');
 
                       contentCard.innerHTML = `
+                        <div class="card mb-3">
                           <div class="card-body">
                             <a href="single-post.php?id=${content.content_id}" style="text-decoration: none; color: inherit;">
                               <p>${content.content}</p>
@@ -199,6 +200,7 @@ if (isset($_GET['id'])) {
                               </button>
                               <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
                           </div>
+                        </div>
                       `;
 
                       contentContainer.appendChild(contentCard);

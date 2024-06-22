@@ -15,7 +15,7 @@
     $username = $_SESSION['username'];
 
     // Fetch user details from the database
-    $stmt = $conn->prepare("SELECT user_id, username, email, profile_pic FROM user WHERE username = ?");
+    $stmt = $conn->prepare("SELECT * FROM admin WHERE admin_username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -57,65 +57,8 @@
                     <div id="content">
         
                         <!-- Topbar -->
-                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                        <h1 class="h3 mb-0 text-gray-800">Admin profile</h1>
-        
-                            <!-- Topbar Navbar -->
-                            <ul class="navbar-nav ml-auto">
-        
-                                <!-- Nav Item - User Information -->
-                                <li class="nav-item dropdown no-arrow">
-                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['username'];?></span>
-                                        <img class="img-profile rounded-circle"
-                                            src="<?php echo htmlspecialchars($user['profile_pic']); ?>">
-                                    </a>
-                                    <!-- Dropdown - User Information -->
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                        aria-labelledby="userDropdown">
-                                        <a class="dropdown-item" href="Profile.php">
-                                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Profile
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Settings
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutConfirmationModal">
-                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Logout
-                                        </a>
-                                    </div>
-                                </li>
-        
-                            </ul>
-        
-                        </nav>
+                        <?php include 'navbar.php'; ?>
                         <!-- End of Topbar -->
-
-                        <!-- Logout modal -->
-                        <div class="modal fade" id="logoutConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="logoutConfirmationModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="logoutConfirmationModalLabel">Confirm Logout</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to logout?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-primary" onclick="logout()">Logout</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
         
                         <!-- Begin Page Content -->
@@ -141,13 +84,13 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="useid">User ID</label>
-                                                    <input type="text" class="form-control" id="userid" name="userid" value="<?php echo htmlspecialchars($user['user_id']); ?>" disabled>
+                                                <input type="hidden" name="userid" value="<?php echo htmlspecialchars($user['admin_id']); ?>">
+
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="username">Username</label>
-                                                    <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required>
+                                                    <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($user['admin_username']); ?>" required>
                                                 </div>
 
                                                 <div class="form-group">
@@ -231,20 +174,22 @@
         if (password !== confirmPassword) {
             showNotification('top', 'right', 'Passwords do not match', 'warning');
             return;
-        } for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-    }
-
-
+        }
+        
         // If validation passes, send the data using AJAX
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'profile_update.php', true); // Update the URL as needed
+        xhr.open('POST', 'profile_update.php', true); 
         
         xhr.onload = function () {
             if (xhr.status === 200) {
-                alert('Profile updated successfully.');
-                console.log(xhr.status);
-                // Optionally, redirect or update the page content
+                const response = xhr.responseText;
+                if (response.includes('Profile updated successfully')) {
+                    alert('Profile updated successfully.');
+                    showAlert('top', 'right', 'Profile updated successfully.', 'success');
+                    location.reload(); 
+                } else {
+                    alert('Profile update failed.');
+                }
             } else {
                 alert('An error occurred while updating the profile.');
             }
@@ -258,18 +203,32 @@
     });
 
     function showNotification(from, align, message, type) {
-    $.notify({
-      icon: "fas fa-check-circle",
-      message: message
-    }, {
-      type: type,
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      }
-    });
-}
+        $.notify({
+        icon: "fas fa-check-circle",
+        message: message
+        }, {
+        type: type,
+        timer: 4000,
+        placement: {
+            from: from,
+            align: align
+        }
+        });
+    }
+
+    function showAlert(from, align, message, type) {
+        $.notify({
+        icon: "fas fa-check-circle",
+        message: message
+        }, {
+        type: type,
+        timer: 4000,
+        placement: {
+            from: from,
+            align: align
+        }
+        });
+    }
 
     </script>
 

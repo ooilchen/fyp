@@ -212,12 +212,9 @@ $conn->close();
           <div class="col-md-3">
             <!-- ======= Sidebar ======= -->
             <div class="aside-block">
-
               <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill" data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular" aria-selected="true">Popular</button>
-                </li>
-
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest" type="button" role="tab" aria-controls="pills-latest" aria-selected="false">Latest</button>
@@ -235,18 +232,16 @@ $conn->close();
                                 FROM content 
                                 JOIN category ON content.category_id = category.category_id 
                                 ORDER BY content.like_count DESC 
-                                LIMIT 6";
+                                LIMIT 4";
 
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
-
                           while ($row = $result->fetch_assoc()) {
                             echo "<div class='post-entry-1 border-bottom'>";
                             echo "<div class='post-meta'><span class='date'>" . $row['like_count'] . " liked</span> <span class='mx-1'>&bullet;</span> <span>" . $row['category_name'] . "</span></div>";
                             echo "<h2 class='mb-2'><a href='single-post.php?id=".$row['content_id']."'>" . $row['content'] . "</a></h2>";
                             echo "</div>";
-                            
                           }
                         } else {
                           echo "No trending content found.";
@@ -254,30 +249,27 @@ $conn->close();
 
                         $conn->close();
                       ?>
-    
                 </div> <!-- End Popular -->
 
                 <!-- Latest -->
-                <div class="tab-pane fade show active" id="pills-popular" role="tabpanel" aria-labelledby="pills-popular-tab">
+                <div class="tab-pane fade" id="pills-latest" role="tabpanel" aria-labelledby="pills-latest-tab">
                   <?php
-                        include 'conn.php'; 
+                        include 'conn.php';
 
                         $sql = "SELECT content.*, category.category_name 
                                 FROM content 
                                 JOIN category ON content.category_id = category.category_id 
                                 ORDER BY content.date_created DESC 
-                                LIMIT 6";
+                                LIMIT 4";
 
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
-
                           while ($row = $result->fetch_assoc()) {
                             echo "<div class='post-entry-1 border-bottom'>";
                             echo "<div class='post-meta'><span class='date'>" . $row['date_created'] . "</span> <span class='mx-1'>&bullet;</span> <span>" . $row['category_name'] . "</span></div>";
                             echo "<h2 class='mb-2'><a href='single-post.php?id=".$row['content_id']."'>" . $row['content'] . "</a></h2>";
                             echo "</div>";
-                            
                           }
                         } else {
                           echo "No trending content found.";
@@ -285,11 +277,10 @@ $conn->close();
 
                         $conn->close();
                       ?>
-    
                 </div> <!-- End Latest -->
-
               </div>
             </div>
+
 
             <div class="aside-block">
                 <h3 class="aside-title">Categories</h3>

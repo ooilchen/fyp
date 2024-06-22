@@ -1,6 +1,7 @@
 <?php
   session_start();
   $user_id= $_SESSION['user_id'];
+  
   include 'conn.php';
 
   if(isset($_GET['id'])) {
@@ -175,91 +176,95 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-    fetch('fetch_all.php') // Fetch all confessions endpoint
-        .then(response => response.json())
-        .then(contentArray => {
-            const contentContainer = document.getElementById('content-container');
-            contentContainer.innerHTML = ''; // Clear existing content
+        fetch('fetch_all.php') 
+            .then(response => response.json())
+            .then(contentArray => {
+                if (!Array.isArray(contentArray)) {
+                    throw new TypeError('Fetched content is not an array');
+                }
 
-            contentArray.forEach(content => {
-                const contentCard = document.createElement('div');
-                contentCard.classList.add('content');
+                const contentContainer = document.getElementById('content-container');
+                contentContainer.innerHTML = ''; // Clear existing content
 
-                contentCard.innerHTML = `
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <a href="single-post.php?id=${content.content_id}" style="text-decoration: none; color: inherit;">
-                                <p>${content.content}</p>
-                                <p><small>${content.date_created} #${content.category_name}</small></p>
-                                ${content.image ? `<img src="${content.image}" alt="Content Image" class="img-fluid">` : ''}
-                            </a>
+                contentArray.forEach(content => {
+                    const contentCard = document.createElement('div');
+                    contentCard.classList.add('content');
+
+                    contentCard.innerHTML = `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <a href="single-post.php?id=${content.content_id}" style="text-decoration: none; color: inherit;">
+                                    <p>${content.content}</p>
+                                    <p><small>${content.date_created} #${content.category_name}</small></p>
+                                    ${content.image ? `<img src="${content.image}" alt="Content Image" class="img-fluid">` : ''}
+                                </a>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-like ${content.is_liked ? 'liked' : ''}" data-id="${content.content_id}">
+                                    ${content.is_liked ? 'Unlike' : 'Like'} 
+                                    <i class="fas fa-thumbs-${content.is_liked ? 'down' : 'up'}"></i> 
+                                    <span class="like-count">${content.like_count || 0}</span>
+                                </button>
+                                <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <button class="btn btn-like ${content.is_liked ? 'liked' : ''}" data-id="${content.content_id}">
-                                ${content.is_liked ? 'Unlike' : 'Like'} 
-                                <i class="fas fa-thumbs-${content.is_liked ? 'down' : 'up'}"></i> 
-                                <span class="like-count">${content.like_count || 0}</span>
-                            </button>
-                            <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
-                        </div>
-                    </div>
-                `;
+                    `;
 
-                contentContainer.appendChild(contentCard);
+                    contentContainer.appendChild(contentCard);
+                });
+
+                attachEventListeners();
+            })
+            .catch(error => {
+                console.error('Error fetching content:', error);
             });
 
-            attachEventListeners();
-        })
-        .catch(error => {
-            console.error('Error fetching content:', error);
-        });
+        function attachEventListeners() {
+            const likeButtons = document.querySelectorAll('.btn-like');
 
-    function attachEventListeners() {
-        const likeButtons = document.querySelectorAll('.btn-like');
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const contentId = this.getAttribute('data-id');
+                    const likeCountSpan = this.querySelector('.like-count');
+                    const isLiked = this.classList.contains('liked'); 
 
-        likeButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const contentId = this.getAttribute('data-id');
-                const likeCountSpan = this.querySelector('.like-count');
-                const isLiked = this.classList.contains('liked'); 
-
-                const endpoint = isLiked ? 'post_unlike.php' : 'post_like.php'; // 
-                fetch(endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ content_id: contentId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        likeCountSpan.textContent = data.new_like_count;
-                        this.classList.toggle('liked'); 
-                        this.innerHTML = `${this.classList.contains('liked') ? 'Unlike' : 'Like'} <i class="fas fa-thumbs-${this.classList.contains('liked') ? 'down' : 'up'}"></i> <span class="like-count">${data.new_like_count}</span>`;
-                    } else if (data.message === 'User not logged in') {
-                        // Notify user to log in
-                        $.notify({
-                            message: 'Please log in to like this post.'
-                        },{
-                            type: 'primary',
-                            delay: 2000,
-                            placement: {
-                                from: "top",
-                                align: "center"
-                            }
-                        });
-                    } else {
-                        console.error('Error liking the post:', data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+                    const endpoint = isLiked ? 'post_unlike.php' : 'post_like.php'; // 
+                    fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ content_id: contentId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            likeCountSpan.textContent = data.new_like_count;
+                            this.classList.toggle('liked'); 
+                            this.innerHTML = `${this.classList.contains('liked') ? 'Unlike' : 'Like'} <i class="fas fa-thumbs-${this.classList.contains('liked') ? 'down' : 'up'}"></i> <span class="like-count">${data.new_like_count}</span>`;
+                        } else if (data.message === 'User not logged in') {
+                            // Notify user to log in
+                            $.notify({
+                                message: 'Please log in to like this post.'
+                            },{
+                                type: 'primary',
+                                delay: 2000,
+                                placement: {
+                                    from: "top",
+                                    align: "center"
+                                }
+                            });
+                        } else {
+                            console.error('Error liking the post:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
                 });
             });
-        });
-    }
-});
+        }
+    });
 
   </script>
 

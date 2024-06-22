@@ -41,7 +41,6 @@
         <?php
           if (isset($_SESSION['user_id'])) {
               // User is logged in
-              echo '<li><a href="Profile.php">Profile</a></li>';
               echo '<li><a href="logout.php">Sign out</a></li>';
           } else {
               // User is not logged in
