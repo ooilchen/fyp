@@ -13,10 +13,17 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link" href="Index.php">
                 <i class="fas fa-fw fa-home"></i>
                 <span>Dashboard</span></a>
+        </li>
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="/User page/Index.php">
+                <i class="fas fa-fw fa-globe"></i>
+                <span>Unimas Confession</span></a>
         </li>
 
         <!-- Divider -->

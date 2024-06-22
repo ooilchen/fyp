@@ -49,46 +49,7 @@
                     <div id="content">
         
                         <!-- Topbar -->
-                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-        
-        
-                            <!-- Topbar Navbar -->
-                            <ul class="navbar-nav ml-auto">
-        
-                                <!-- Nav Item - User Information -->
-                                <li class="nav-item dropdown no-arrow">
-                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['username'];?></span>
-                                        <img class="img-profile rounded-circle"
-                                            src="../images/undraw_Female_avatar_efig.png">
-                                    </a>
-                                    <!-- Dropdown - User Information -->
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                        aria-labelledby="userDropdown">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Profile
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Settings
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Activity Log
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Logout
-                                        </a>
-                                    </div>
-                                </li>
-        
-                            </ul>
-        
-                        </nav>
+                        <?php include 'navbar.php'; ?>
                         <!-- End of Topbar -->
         
                         <!-- Begin Page Content -->
@@ -119,6 +80,7 @@
                                                     <th>Description</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
+                                                    <th>Delete</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -140,6 +102,7 @@
                                                         echo "<td>" . $row["category_desc"] . "</td>";
                                                         echo "<td>" . ($row["status"] == '1' ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>') . "</td>";
                                                         echo "<td><button class='btn btn-primary' onclick='toggleStatus(\"" . $row["category_id"] . "\", \"" . $row["status"] . "\")'>Change Status</button></td>";
+                                                        echo "<td><button class='btn btn-danger' onclick='deleteCategory(\"" . $row["category_id"] . "\")'>Delete</button></td>";
                                                         echo "</tr>";
                                                     }
                                                 } else {
@@ -295,38 +258,53 @@
                 xhr.send(formData);
             
 
-        return true; // Allow form submission
+        return true; 
     }
 
     function toggleStatus(categoryId, currentStatus) {
-    var newStatus = currentStatus === '1' ? '0' : '1'; // Toggle status
-    // Send AJAX request to update status
+    var newStatus = currentStatus === '1' ? '0' : '1'; 
+
     $.ajax({
         type: 'POST',
         url: 'update_category_status.php',
-        data: JSON.stringify({ category_id: categoryId, new_status: newStatus }), // Match variable names
-        contentType: 'application/json', // Specify content type
-        dataType: 'json', // Expect JSON response
+        data: JSON.stringify({ category_id: categoryId, new_status: newStatus }), 
+        contentType: 'application/json', 
+        dataType: 'json', 
         success: function(response) {
-            // Handle JSON response
+            
             if (response.status === 'success') {
                 console.log(response.message);
                 location.reload();
-                // Update UI or do something else
+                
             } else {
                 console.error(response.message);
-                // Handle error
+                
             }
         },
         error: function(xhr, status, error) {
-            // Handle error
-            console.error('Error:', xhr.responseText); // Log the full response text
+            
+            console.error('Error:', xhr.responseText); 
         }
     });
 }
 
 
-
+function deleteCategory(cat_id) {
+      if(confirm('Are you sure you want to delete this category?')) {
+        $.ajax({
+          type: 'POST',
+          url: 'delete_cat.php', // The PHP script to handle the request
+          data: { cat_id: cat_id },
+          success: function(response) {
+            alert(response);
+            location.reload(); // Reload the page to see the changes
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+          }
+        });
+      }
+    }
 
     </script>
       
