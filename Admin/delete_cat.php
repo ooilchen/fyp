@@ -1,7 +1,10 @@
 <?php
+
 include 'conn.php';
 
+
 if (isset($_POST['cat_id']) && !empty($_POST['cat_id'])) {
+    
     $cat_id = $_POST['cat_id'];
 
     $sql = "DELETE FROM category WHERE category_id = ?";
@@ -9,14 +12,19 @@ if (isset($_POST['cat_id']) && !empty($_POST['cat_id'])) {
     $stmt->bind_param("s", $cat_id);
 
     if ($stmt->execute()) {
+        
         echo "Category deleted successfully!";
     } else {
+        
         echo "Error: " . $stmt->error;
     }
 
+    
     $stmt->close();
+    
     $conn->close();
 } else {
+    // If image_id is not set or empty
     echo "Invalid request. Category ID is missing.";
 }
 ?>

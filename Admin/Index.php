@@ -71,7 +71,45 @@
                     <div id="content">
         
                         <!-- Topbar -->
-                        <?php include 'navbar.php'; ?>
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        
+                            <!-- Topbar Navbar -->
+                            <ul class="navbar-nav ml-auto">
+        
+                                <!-- Nav Item - User Information -->
+                                <li class="nav-item dropdown no-arrow">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['username'];?></span>
+                                        <img class="img-profile rounded-circle"
+                                            src="../images/undraw_Female_avatar_efig.png">
+                                    </a>
+                                    <!-- Dropdown - User Information -->
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                        aria-labelledby="userDropdown">
+                                        <a class="dropdown-item" href="Profile.php">
+                                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Profile
+                                        </a>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Settings
+                                        </a>
+                                        <!-- <a class="dropdown-item" href="#">
+                                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Activity Log
+                                        </a> -->
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Logout
+                                        </a>
+                                    </div>
+                                </li>
+        
+                            </ul>
+        
+                        </nav>
                         <!-- End of Topbar -->
         
                         <!-- Begin Page Content -->
@@ -240,7 +278,58 @@
 
                             </div>
         
-                          
+                            <!-- Content Row -->
+                            <div class="row">
+        
+                                <!-- Content Column -->
+                                <div class="col-lg-6 mb-4">
+        
+                                    <!-- Project Card Example -->
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <h4 class="small font-weight-bold">Server Migration <span
+                                                    class="float-right">20%</span></h4>
+                                            <div class="progress mb-4">
+                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
+                                                    aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <h4 class="small font-weight-bold">Sales Tracking <span
+                                                    class="float-right">40%</span></h4>
+                                            <div class="progress mb-4">
+                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
+                                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <h4 class="small font-weight-bold">Customer Database <span
+                                                    class="float-right">60%</span></h4>
+                                            <div class="progress mb-4">
+                                                <div class="progress-bar" role="progressbar" style="width: 60%"
+                                                    aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <h4 class="small font-weight-bold">Payout Details <span
+                                                    class="float-right">80%</span></h4>
+                                            <div class="progress mb-4">
+                                                <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
+                                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <h4 class="small font-weight-bold">Account Setup <span
+                                                    class="float-right">Complete!</span></h4>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+                                                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+        
+                                </div>
+        
+                                <div class="col-lg-6 mb-4">
+        
+                                </div>
+                            </div>
         
                         </div>
                         <!-- /.container-fluid -->
