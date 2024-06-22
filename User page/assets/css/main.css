@@ -1468,3 +1468,12 @@ input[type="submit"]:hover {
     text-align: center;
     margin-top: 20px;
 }
+
+.login-link {
+  transition: text-decoration 0.3s ease; 
+}
+
+.login-link:hover {
+  text-decoration: none; 
+}
+

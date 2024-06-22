@@ -198,7 +198,7 @@ if (isset($_GET['id'])) {
                                 <i class="fas fa-thumbs-${content.is_liked ? 'down' : 'up'}"></i> 
                                 <span class="like-count">${content.like_count || 0}</span>
                               </button>
-                              <button class="btn btn-comment" data-id="${content.content_id}">Comment <i class="fas fa-comment"></i></button>
+                              <a href="single-post.php?id=${content.content_id}" class="btn btn-comment">Comment <i class="fas fa-comment"></i></a>
                           </div>
                         </div>
                       `;

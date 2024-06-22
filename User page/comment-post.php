@@ -1,31 +1,33 @@
 <?php
 session_start();
+include 'conn.php';
 
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['success' => false, 'message' => 'User not logged in']);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    $contentId = $_POST['content_id'];
+    $commentText = $_POST['comment_text'];
+    $userId = $_SESSION['user_id']; 
 
-$userId = $_SESSION['user_id'];
-$postId = json_decode(file_get_contents('php://input'), true)['postId'];
-$commentText = json_decode(file_get_contents('php://input'), true)['commentText'];
-$commentId = uniqid('comment-', true);
+    $commentId = uniqid('COMMENT_'); 
 
-// Here, perform the database operations to comment on the post
-// For example, insert a new record into the comments table
-$conn = new mysqli("localhost", "username", "password", "fyp");
+    // Insert the comment into the database
+    $query = "INSERT INTO comments (comment_id, content_id, user_id, comment_text, date_commented) VALUES (?, ?, ?, ?, NOW())";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('ssss', $commentId, $contentId, $userId, $commentText);
+    
+    if ($stmt->execute()) {
+        // Comment inserted successfully
+        echo json_encode(['success' => true]);
+    } else {
+        // Error inserting comment
+        echo json_encode(['success' => false, 'message' => 'Error inserting comment']);
+    }
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$sql = "INSERT INTO comments (comment_id, content_id, user_id, comment_text) VALUES ('$commentId', '$postId', '$userId', '$commentText')";
-
-if ($conn->query($sql) === TRUE) {
-    echo json_encode(['success' => true]);
+    $stmt->close();
+    $conn->close();
 } else {
-    echo json_encode(['success' => false, 'message' => $conn->error]);
+    
+    http_response_code(405); 
+    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
 }
-
-$conn->close();
 ?>

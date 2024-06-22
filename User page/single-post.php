@@ -108,105 +108,86 @@ $conn->close();
               <?php endif; ?>
           </div><!-- End Single Post Content -->
 
-            <!-- ======= Comments ======= -->
-            <div class="comments">
-              <h5 class="comment-title py-4">2 Comments</h5>
-              <div class="comment d-flex mb-4">
-                <div class="flex-shrink-0">
-                  <div class="avatar avatar-sm rounded-circle">
-                    <img class="avatar-img" src="assets/img/person-5.jpg" alt="" class="img-fluid">
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-2 ms-sm-3">
-                  <div class="comment-meta d-flex align-items-baseline">
-                    <h6 class="me-2">Jordan Singer</h6>
-                    <span class="text-muted">2d</span>
-                  </div>
-                  <div class="comment-body">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Non minima ipsum at amet doloremque qui magni, placeat deserunt pariatur itaque laudantium impedit aliquam eligendi repellendus excepturi quibusdam nobis esse accusantium.
-                  </div>
+<!-- ======= Comments ======= -->
+<div class="comments">
+    <h5 class="comment-title py-4">Comments</h5>
+    <?php
+    // Include your database connection
+    include 'conn.php';
 
-                  <div class="comment-replies bg-light p-3 mt-3 rounded">
-                    <h6 class="comment-replies-title mb-4 text-muted text-uppercase">2 replies</h6>
+    // Example content_id (replace with actual content_id)
+    // $contentId = 1; // Example content_id
 
-                    <div class="reply d-flex mb-4">
-                      <div class="flex-shrink-0">
-                        <div class="avatar avatar-sm rounded-circle">
-                          <img class="avatar-img" src="assets/img/person-4.jpg" alt="" class="img-fluid">
-                        </div>
-                      </div>
-                      <div class="flex-grow-1 ms-2 ms-sm-3">
-                        <div class="reply-meta d-flex align-items-baseline">
-                          <h6 class="mb-0 me-2">Brandon Smith</h6>
-                          <span class="text-muted">2d</span>
-                        </div>
-                        <div class="reply-body">
-                          Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="reply d-flex">
-                      <div class="flex-shrink-0">
-                        <div class="avatar avatar-sm rounded-circle">
-                          <img class="avatar-img" src="assets/img/person-3.jpg" alt="" class="img-fluid">
-                        </div>
-                      </div>
-                      <div class="flex-grow-1 ms-2 ms-sm-3">
-                        <div class="reply-meta d-flex align-items-baseline">
-                          <h6 class="mb-0 me-2">James Parsons</h6>
-                          <span class="text-muted">1d</span>
-                        </div>
-                        <div class="reply-body">
-                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio dolore sed eos sapiente, praesentium.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+    // Fetch comments for the specified content_id
+    $query = "SELECT * FROM comments WHERE content_id = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "s", $content_Id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    // Loop through each comment and display inline
+    while ($row = mysqli_fetch_assoc($result)) {
+        // $userAvatar = $row['user_avatar']; // Replace with actual field name
+        $userName = $row['user_id']; // Replace with actual field name
+        $dateCommented = $row['date_commented']; // Replace with actual field name
+        $commentText = $row['comment_text']; // Replace with actual field name
+
+        // Output HTML for each comment
+        echo '
+        <div class="comment d-flex mb-4">
+            <div class="flex-shrink-0">
+                <div class="avatar avatar-sm rounded-circle">
+                    <img class="avatar-img" src="' . $userAvatar . '" alt="User Avatar">
                 </div>
-              </div>
-              <div class="comment d-flex">
-                <div class="flex-shrink-0">
-                  <div class="avatar avatar-sm rounded-circle">
-                    <img class="avatar-img" src="assets/img/person-2.jpg" alt="" class="img-fluid">
-                  </div>
+            </div>
+            <div class="flex-grow-1 ms-2 ms-sm-3">
+                <div class="comment-meta d-flex align-items-baseline">
+                    <h6 class="me-2">' . $userName . '</h6>
+                    <span class="text-muted">' . $dateCommented . '</span>
                 </div>
-                <div class="flex-shrink-1 ms-2 ms-sm-3">
-                  <div class="comment-meta d-flex">
-                    <h6 class="me-2">Santiago Roberts</h6>
-                    <span class="text-muted">4d</span>
-                  </div>
-                  <div class="comment-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto laborum in corrupti dolorum, quas delectus nobis porro accusantium molestias sequi.
-                  </div>
+                <div class="comment-body">
+                    ' . $commentText . '
                 </div>
-              </div>
-            </div><!-- End Comments -->
+            </div>
+        </div>';
+    }
+
+    // Close statement and connection
+    mysqli_stmt_close($stmt);
+    mysqli_close($conn);
+    ?>
+</div><!-- End Comments -->
+
 
             <!-- ======= Comments Form ======= -->
             <div class="row justify-content-center mt-5">
-
               <div class="col-lg-12">
                 <h5 class="comment-title">Leave a Comment</h5>
-                <div class="row">
-                  <div class="col-lg-6 mb-3">
-                    <label for="comment-name">Name</label>
-                    <input type="text" class="form-control" id="comment-name" placeholder="Enter your name">
+                <?php
+                // Check if user is logged in
+                if (isset($_SESSION['user_id'])) {
+                ?>
+                <form id="commentForm">
+                  <input type="hidden" id="contentId" value="<?php echo $content_id; ?>">
+                  <div class="row">
+                      <div class="col-lg-12 mb-3">
+                          <textarea class="form-control" id="commentMessage" placeholder="Enter your comment" cols="30" rows="5"></textarea>
+                      </div>
+                      <div class="col-12">
+                          <button type="submit" class="btn btn-primary">Post Comment</button>
+                      </div>
                   </div>
-                  <div class="col-lg-6 mb-3">
-                    <label for="comment-email">Email</label>
-                    <input type="text" class="form-control" id="comment-email" placeholder="Enter your email">
-                  </div>
-                  <div class="col-12 mb-3">
-                    <label for="comment-message">Message</label>
-
-                    <textarea class="form-control" id="comment-message" placeholder="Enter your name" cols="30" rows="10"></textarea>
-                  </div>
-                  <div class="col-12">
-                    <input type="submit" class="btn btn-primary" value="Post comment">
-                  </div>
-                </div>
+              </form>
+                <?php
+                } else {
+                  
+                  echo '<p>Please <a href="Signin.php" class="login-link">log in</a> to leave a comment.</p>';
+                }
+                ?>
               </div>
-            </div><!-- End Comments Form -->
+            </div>
+            <!-- End Comments Form -->
+
 
           </div>
           <div class="col-md-3">
@@ -231,6 +212,7 @@ $conn->close();
                         $sql = "SELECT content.*, category.category_name 
                                 FROM content 
                                 JOIN category ON content.category_id = category.category_id 
+                                WHERE content.content_status = 1
                                 ORDER BY content.like_count DESC 
                                 LIMIT 4";
 
@@ -258,7 +240,8 @@ $conn->close();
 
                         $sql = "SELECT content.*, category.category_name 
                                 FROM content 
-                                JOIN category ON content.category_id = category.category_id 
+                                JOIN category ON content.category_id = category.category_id
+                                WHERE content.content_status = 1 
                                 ORDER BY content.date_created DESC 
                                 LIMIT 4";
 
@@ -401,7 +384,7 @@ $conn->close();
   <script src="assets/js/main.js"></script>
 
   <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
   <!-- Popper.js -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -411,6 +394,57 @@ $conn->close();
 
   <!-- Bootstrap Notify -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap-notify@latest/dist/bootstrap-notify.min.js"></script>
+
+  <script>
+   $(document).ready(function() {
+    $('#commentForm').submit(function(e) {
+        e.preventDefault(); 
+
+        var contentId = $('#contentId').val();
+        var commentMessage = $('#commentMessage').val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'comment-post.php', 
+            data: {
+                content_id: contentId,
+                comment_text: commentMessage
+            },
+            success: function(response) {
+                var data = JSON.parse(response);
+                
+                if (data.success) {
+                    // Show success message
+                    $.notify({
+                              message: 'Comment added successfully'
+                          },{
+                              type: 'success',
+                              delay: 2000,
+                              placement: {
+                                  from: "top",
+                                  align: "right"
+                              }
+                          });
+
+                    // Reload the page after 2 seconds
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                    
+                } else {
+                    // Show error message
+                    alert('Error adding comment: ' + data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error adding comment:', error);
+                alert('Error adding comment. Please try again later.');
+            }
+        });
+    });
+});
+
+  </script>
 
 </body>
 
