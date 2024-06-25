@@ -2,7 +2,7 @@ Web Based Unimas Coonfession For Students and Administrators
 
 This project aims to:
 •	Develop a web-based campus confession for UNIMAS students.
-•	Develop a user-friendly and analytical online platform for students to have more interaction and get updates within campus.
+•	Develop a user-friendly and analytical online platform for students to have more interaction within campus.
 •	Create a systematic yet efficient content filtering and management administration system.
 
 How to run
