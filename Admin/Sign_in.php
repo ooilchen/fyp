@@ -37,8 +37,7 @@
             <input type="submit" class="btn btn-primary" value="Login">
         </form>
         <div class="login-links mt-3">
-            <a href="/forgot-password">Forgot password?</a> | 
-            <a href="/signup">Signup</a>
+            <a href="/forgot-password">Forgot password?</a>
         </div>
     </div>
 </body>
