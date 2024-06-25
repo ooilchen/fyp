@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->num_rows > 0) {
             echo json_encode([
                 'success' => false,
-                'message' => 'User already liked this post'
+                'message' => 'You have liked this post'
             ]);
         } else {
             // Update the like count in the database

@@ -250,6 +250,16 @@ if (isset($_GET['id'])) {
                               }
                           });
                       } else {
+                        $.notify({
+                                message: data.message
+                            },{
+                                type: 'danger',
+                                delay: 2000,
+                                placement: {
+                                    from: "top",
+                                    align: "right"
+                                }
+                            });
                           console.error('Error liking the post:', data.message);
                       }
                   })

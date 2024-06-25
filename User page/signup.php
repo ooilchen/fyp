@@ -29,7 +29,12 @@
     <label for="confirm-password">Confirm Password</label>
     <input class="form-control mb-3" type="password" id="confirm-password" name="confirm-password" >
 
+    
+
     <button type="submit" class="btn btn-primary">Register</button>
+
+    <a href="Signin.php">Have an account? Sign in</a>
+
     <div id="error-message" class="error"></div>
   </form>
 </div>

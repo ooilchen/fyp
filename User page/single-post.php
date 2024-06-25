@@ -112,52 +112,53 @@ $conn->close();
 <div class="comments">
     <h5 class="comment-title py-4">Comments</h5>
     <?php
-    // Include your database connection
-    include 'conn.php';
+include 'conn.php';
 
-    // Example content_id (replace with actual content_id)
-    // $contentId = 1; // Example content_id
+$content_id = $_GET['id'];
 
-    // Fetch comments for the specified content_id
-    $query = "SELECT * FROM comments WHERE content_id = ?";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "s", $content_Id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+// Fetch comments for the specified content_id and join with user table to get username and profile pic
+$query = "SELECT c.*, u.username, u.profile_pic 
+          FROM comments c 
+          JOIN user u ON c.user_id = u.user_id 
+          WHERE c.content_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $content_id);  // Assuming content_id is an integer
+$stmt->execute();
+$result = $stmt->get_result();
 
-    // Loop through each comment and display inline
-    while ($row = mysqli_fetch_assoc($result)) {
-        // $userAvatar = $row['user_avatar']; // Replace with actual field name
-        $userName = $row['user_id']; // Replace with actual field name
-        $dateCommented = $row['date_commented']; // Replace with actual field name
-        $commentText = $row['comment_text']; // Replace with actual field name
+// Loop through each comment and display inline
+while ($row = $result->fetch_assoc()) {
+    $userAvatar = isset($row['profile_pic']) ? $row['profile_pic'] : 'default-avatar.jpg'; // Replace with default avatar if not available
+    $userName = $row['username'];
+    $dateCommented = $row['date_commented'];
+    $commentText = $row['comment_text'];
 
-        // Output HTML for each comment
-        echo '
-        <div class="comment d-flex mb-4">
-            <div class="flex-shrink-0">
-                <div class="avatar avatar-sm rounded-circle">
-                    <img class="avatar-img" src="' . $userAvatar . '" alt="User Avatar">
-                </div>
+    // Output HTML for each comment
+    echo '
+    <div class="comment d-flex mb-4">
+        <div class="flex-shrink-0">
+            <div class="avatar avatar-sm rounded-circle">
+                <img class="avatar-img" src="' . htmlspecialchars($userAvatar) . '" alt="User Avatar">
             </div>
-            <div class="flex-grow-1 ms-2 ms-sm-3">
-                <div class="comment-meta d-flex align-items-baseline">
-                    <h6 class="me-2">' . $userName . '</h6>
-                    <span class="text-muted">' . $dateCommented . '</span>
-                </div>
-                <div class="comment-body">
-                    ' . $commentText . '
-                </div>
+        </div>
+        <div class="flex-grow-1 ms-2 ms-sm-3">
+            <div class="comment-meta d-flex align-items-baseline">
+                <h6 class="me-2">' . htmlspecialchars($userName) . '</h6>
+                <span class="text-muted">' . htmlspecialchars($dateCommented) . '</span>
             </div>
-        </div>';
-    }
+            <div class="comment-body">
+                ' . htmlspecialchars($commentText) . '
+            </div>
+        </div>
+    </div>';
+}
 
-    // Close statement and connection
-    mysqli_stmt_close($stmt);
-    mysqli_close($conn);
-    ?>
+// Close statement and connection
+$stmt->close();
+$conn->close();
+?>
+
 </div><!-- End Comments -->
-
 
             <!-- ======= Comments Form ======= -->
             <div class="row justify-content-center mt-5">
@@ -354,22 +355,8 @@ $conn->close();
       </div>   
       <!--End of modal-->
 
-  <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-
-  <div class="footer-legal">
-
-      <div class="row justify-content-between">
-        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-          <div class="copyright">
-            © Copyright <strong><span>ZenBlog</span></strong>. All Rights Reserved
-          </div>
-        </div>
-      </div>
-
-  </div>
-
-  </footer>
+      <!-- ======= Footer ======= -->
+      <?php include 'footer.php'; ?>
 
   <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
