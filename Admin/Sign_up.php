@@ -30,6 +30,9 @@
             <label for="username">Email:</label>
             <input class="form-control mb-3" type="email" placeholder="example@email.com" id="email" name="email" required>
 
+            <label for="username">Username</label>
+            <input class="form-control mb-3" type="text" placeholder="username" id="username" name="username" required>
+
             <label for="password">Password:</label>
             <input class="form-control mb-3" type="password" placeholder="password" id="password" name="password" required>
 

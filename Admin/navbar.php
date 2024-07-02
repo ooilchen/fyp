@@ -19,6 +19,10 @@
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
+                <a class="dropdown-item" href="Request.php">
+                    <i class="fas fa-business-time fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Manage Admin Approval Requests
+                </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="logout_admin.php">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

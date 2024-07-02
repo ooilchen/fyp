@@ -4,6 +4,7 @@ session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
+    $username = $_POST['admin_username'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
 
@@ -32,9 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = uniqid();
 
     // Insert the admin registration into the admin table (mark as unapproved)
-    $sql = "INSERT INTO admin (admin_id, email, password, approved) VALUES (?, ?, ?, FALSE)";
+    $sql = "INSERT INTO admin (admin_id, admin_username, email, password, approved) VALUES (?, ?, ?, ?, FALSE)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $id, $email, $hashed_password);
+    $stmt->bind_param("ssss", $id, $username, $email, $hashed_password);
 
     if ($stmt->execute()) {
         header("Location: Sign_up.php?error=Success");
