@@ -23,6 +23,8 @@
                     echo "<p class='error-message'>Invalid email or password. Please try again.</p>";
                 } elseif($error === "UserNotFound") {
                     echo "<p class='error-message'>User not found. Please register first.</p>";
+                } elseif($error === "AccountNotApproved") {
+                    echo "<p class='error-message'>Your account has not been approved yet. Please contact admin.</p>";
                 }
             }
         ?>
@@ -37,7 +39,8 @@
             <input type="submit" class="btn btn-primary" value="Login">
         </form>
         <div class="login-links mt-3">
-            <a href="/forgot-password">Forgot password?</a>
+            <a href="/forgot-password">Forgot password?</a> |
+            <a href="Sign_up.php">Signup</a>
         </div>
     </div>
 </body>
