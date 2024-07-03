@@ -122,13 +122,13 @@ $query = "SELECT c.*, u.username, u.profile_pic
           JOIN user u ON c.user_id = u.user_id 
           WHERE c.content_id = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("s", $content_id);  // Assuming content_id is an integer
+$stmt->bind_param("s", $content_id);  
 $stmt->execute();
 $result = $stmt->get_result();
 
 // Loop through each comment and display inline
 while ($row = $result->fetch_assoc()) {
-    $userAvatar = isset($row['profile_pic']) ? $row['profile_pic'] : 'default-avatar.jpg'; // Replace with default avatar if not available
+    $userAvatar = isset($row['profile_pic']) ? $row['profile_pic'] : 'default-avatar.jpg'; 
     $userName = $row['username'];
     $dateCommented = $row['date_commented'];
     $commentText = $row['comment_text'];
