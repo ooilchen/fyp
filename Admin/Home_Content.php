@@ -211,7 +211,7 @@
                             <div class="col-md-12 mb-3">
                                 <label for="announcementImage">Change Image:</label>
                                 <div class="input-group">
-                                    <input type="file" class="form-control" id="announcementImage" name="announcementImage">
+                                    <input type="file" class="form-control" id="announcementImage" name="announcementImage" accept="image/*">
                                 </div>
                             </div>
                         </div>

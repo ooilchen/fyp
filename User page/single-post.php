@@ -102,63 +102,61 @@ $conn->close();
               <p><span class="firstcharacter"><?php echo htmlspecialchars($first_character); ?></span><?php echo nl2br(htmlspecialchars($content_text)); ?></p>
               <?php if ($image): ?>
                   <figure class="my-4">
-                      <img src="<?php echo htmlspecialchars($image); ?>" alt="" class="img-fluid">
+                      <img src="<?php echo htmlspecialchars($image); ?>" alt="" class="img-fluid" style="width: 50%">
                       <figcaption>There is a picture here.</figcaption>
                   </figure>
               <?php endif; ?>
           </div><!-- End Single Post Content -->
 
-<!-- ======= Comments ======= -->
-<div class="comments">
-    <h5 class="comment-title py-4">Comments</h5>
-    <?php
-include 'conn.php';
+          <!-- ======= Comments ======= -->
+          <div class="comments">
+              <h5 class="comment-title py-4">Comments</h5>
+              <?php
+          include 'conn.php';
 
-$content_id = $_GET['id'];
+          $content_id = $_GET['id'];
 
-// Fetch comments for the specified content_id and join with user table to get username and profile pic
-$query = "SELECT c.*, u.username, u.profile_pic 
-          FROM comments c 
-          JOIN user u ON c.user_id = u.user_id 
-          WHERE c.content_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("s", $content_id);  
-$stmt->execute();
-$result = $stmt->get_result();
+          $query = "SELECT c.*, u.username, u.profile_pic 
+                    FROM comments c 
+                    JOIN user u ON c.user_id = u.user_id 
+                    WHERE c.content_id = ?";
+          $stmt = $conn->prepare($query);
+          $stmt->bind_param("s", $content_id);  
+          $stmt->execute();
+          $result = $stmt->get_result();
 
-// Loop through each comment and display inline
-while ($row = $result->fetch_assoc()) {
-    $userAvatar = isset($row['profile_pic']) ? $row['profile_pic'] : 'default-avatar.jpg'; 
-    $userName = $row['username'];
-    $dateCommented = $row['date_commented'];
-    $commentText = $row['comment_text'];
+          while ($row = $result->fetch_assoc()) {
+              $userAvatar = isset($row['profile_pic']) ? $row['profile_pic'] : 'default-avatar.jpg'; 
+              $userName = $row['username'];
+              $dateCommented = $row['date_commented'];
+              $commentText = $row['comment_text'];
 
-    // Output HTML for each comment
-    echo '
-    <div class="comment d-flex mb-4">
-        <div class="flex-shrink-0">
-            <div class="avatar avatar-sm rounded-circle">
-                <img class="avatar-img" src="' . htmlspecialchars($userAvatar) . '" alt="User Avatar">
-            </div>
-        </div>
-        <div class="flex-grow-1 ms-2 ms-sm-3">
-            <div class="comment-meta d-flex align-items-baseline">
-                <h6 class="me-2">' . htmlspecialchars($userName) . '</h6>
-                <span class="text-muted">' . htmlspecialchars($dateCommented) . '</span>
-            </div>
-            <div class="comment-body">
-                ' . htmlspecialchars($commentText) . '
-            </div>
-        </div>
-    </div>';
-}
+              // Output HTML for each comment
+              echo '
+              <div class="comment d-flex mb-4">
+                  <div class="flex-shrink-0">
+                      <div class="avatar avatar-sm rounded-circle">
+                          <img class="avatar-img" src="' . htmlspecialchars($userAvatar) . '" alt="User Avatar">
+                      </div>
+                  </div>
+                  <div class="flex-grow-1 ms-2 ms-sm-3">
+                      <div class="comment-meta d-flex align-items-baseline">
+                          <h6 class="me-2">' . htmlspecialchars($userName) . '</h6>
+                          <span class="text-muted">' . htmlspecialchars($dateCommented) . '</span>
+                      </div>
+                      <div class="comment-body">
+                          ' . htmlspecialchars($commentText) . '
+                      </div>
+                  </div>
+              </div>';
+          }
 
-// Close statement and connection
-$stmt->close();
-$conn->close();
-?>
+          // Close statement and connection
+          $stmt->close();
+          $conn->close();
+          ?>
 
-</div><!-- End Comments -->
+          </div><!-- End Comments -->
 
             <!-- ======= Comments Form ======= -->
             <div class="row justify-content-center mt-5">

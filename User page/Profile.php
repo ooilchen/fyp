@@ -1,15 +1,35 @@
-
 <?php
 session_start();
 
-// Ensure user is logged in, redirect if not
 if (!isset($_SESSION['user_id'])) {
-    header("Location: signin.php"); 
+    header("Location: signin.php");
     exit();
 }
 
 include 'conn.php';
 
+// Fetch user details
+$user_id = $_SESSION['user_id'];
+$sql_user = "SELECT username, email, profile_pic FROM user WHERE user_id = ?";
+$stmt_user = $conn->prepare($sql_user);
+$stmt_user->bind_param("s", $user_id);
+$stmt_user->execute();
+$result_user = $stmt_user->get_result();
+
+if ($result_user->num_rows > 0) {
+    $user = $result_user->fetch_assoc();
+    $username = $user['username'];
+    $email = $user['email'];
+    $profile_pic = $user['profile_pic'];
+} else {
+    $username = "Unknown User";
+    $email = "No Email";
+    $profile_pic = "../images/profile-icon-design-free-vector.jpg"; 
+}
+
+$stmt_user->close();
+
+// Fetch categories and likes
 $sql = "SELECT c.category_name, SUM(co.like_count) AS total_likes
         FROM category c
         LEFT JOIN content co ON c.category_id = co.category_id
@@ -28,12 +48,13 @@ if ($result->num_rows > 0) {
 }
 
 // Fetch liked posts by the user
-$user_id = $_SESSION['user_id'];
-$sql_liked_posts = "SELECT c.*
-                    FROM content c
+$sql_liked_posts = "SELECT c.* FROM content c
                     INNER JOIN user_likes ul ON c.content_id = ul.content_id
-                    WHERE ul.user_id = $user_id";
-$result_liked_posts = $conn->query($sql_liked_posts);
+                    WHERE ul.user_id = ?";
+$stmt_liked_posts = $conn->prepare($sql_liked_posts);
+$stmt_liked_posts->bind_param("i", $user_id);
+$stmt_liked_posts->execute();
+$result_liked_posts = $stmt_liked_posts->get_result();
 
 $likedPosts = [];
 if ($result_liked_posts->num_rows > 0) {
@@ -42,23 +63,18 @@ if ($result_liked_posts->num_rows > 0) {
     }
 }
 
+$stmt_liked_posts->close();
 $conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
     <title>User Profile - ZenBlog</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
-
-    <!-- Favicons -->
-    <!-- <link href="../assets/img/favicon.png" rel="icon">
-    <link href="../User page/assets/img/person-2.jpg" rel="apple-touch-icon"> -->
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,116 +94,60 @@ $conn->close();
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <!-- Custom Styles -->
-    <style>
-        .profile-section {
-            padding: 80px 0;
-        }
-
-        .profile-info {
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-picture {
-            max-width: 200px;
-            height: auto;
-            border-radius: 50%;
-            margin-bottom: 20px;
-        }
-
-        .upload-btn-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-
-        .btn-upload {
-            font-size: 14px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            padding: 8px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .btn-upload:hover {
-            background-color: #0056b3;
-        }
-
-        .file-input {
-            position: absolute;
-            font-size: 100px;
-            right: 0;
-            top: 0;
-            opacity: 0;
-        }
-
-        .post-container {
-            margin-top: 30px;
-        }
-
-        .post {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        .post img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
-
 <body>
-
     <?php include 'header.php'; ?>
-
     <main id="main">
-        <section id="profile" class="profile-section">
-            <div class="container" data-aos="fade-up">
-                <div class="row">
-                    <div class="col-lg-6 offset-lg-3">
-                        <div class="profile-info">
-                            <div class="text-center">
-                                <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile Picture" class="profile-picture">
-                                <h2><?php echo htmlspecialchars($username); ?></h2>
-                                <p>Email: <?php echo htmlspecialchars($email); ?></p>
-                                <!-- Add more profile details as needed -->
-
-                                <!-- Upload Profile Picture Form -->
-                                <div class="upload-btn-wrapper">
-                                    <button class="btn-upload">Upload Photo</button>
-                                    <input type="file" name="profile_photo" class="file-input">
-                                </div>
+    <section id="profile" class="profile-section">
+    <div class="container" data-aos="fade-up">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <div class="profile-info">
+                    <div class="text-center">
+                        <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile Picture" class="profile-picture">
+                        <h2><?php echo htmlspecialchars($username); ?></h2>
+                        <p>Email: <?php echo htmlspecialchars($email); ?></p>
+                        <!-- Upload Profile Picture Form -->
+                        <form action="upload_profile.php" method="POST" enctype="multipart/form-data" class="d-flex flex-column align-items-center" onsubmit="return validateForm()">
+                            <div class="upload-btn-wrapper mb-3">
+                                <button class="btn-upload">Upload Photo</button>
+                                <input type="file" name="profile_photo" id="profile_photo" class="file-input" accept="image/*">
                             </div>
-                        </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <p id="error-msg" class="text-danger mt-2"></p>
+                        </form>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+
+
+
+
+
 
         <!-- Liked Posts Section -->
         <section id="liked-posts" class="post-container">
             <div class="container" data-aos="fade-up">
                 <h2 class="text-center mb-4">Liked Posts</h2>
-                <?php foreach ($likedPosts as $post) : ?>
-                    <div class="post">
-                        <?php if (!empty($post['image'])) : ?>
-                            <img src="<?php echo htmlspecialchars($post['image']); ?>" alt="Post Image">
-                        <?php endif; ?>
-                        <p><?php echo htmlspecialchars($post['content']); ?></p>
-                        <small>Likes: <?php echo htmlspecialchars($post['like_count']); ?></small>
-                    </div>
-                <?php endforeach; ?>
+                <div class="row">
+                    <?php foreach ($likedPosts as $post) : ?>
+                        <div class="col-md-4">
+                            <div class="post">
+                                <?php if (!empty($post['image'])) : ?>
+                                    <img src="<?php echo htmlspecialchars($post['image']); ?>" alt="Post Image" class="post-image">
+                                <?php endif; ?>
+                                <p><?php echo htmlspecialchars($post['content']); ?></p>
+                                <small>Likes: <?php echo htmlspecialchars($post['like_count']); ?></small>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </section>
+
 
     </main>
     <!-- End #main -->
@@ -229,6 +189,21 @@ $conn->close();
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-</body>
+    <script>
+    function validateForm() {
+        var fileInput = document.getElementById('profile_photo');
+        var errorMsg = document.getElementById('error-msg');
+        
+        // Check if no file is selected
+        if (fileInput.files.length === 0) {
+            errorMsg.textContent = "Please select an image.";
+            return false; // Prevent form submission
+        } else {
+            errorMsg.textContent = ""; // Clear any previous error message
+            return true; // Allow form submission
+        }
+    }
+</script>
 
+</body>
 </html>

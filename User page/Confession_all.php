@@ -58,7 +58,7 @@
     <main id="main">
       <div data-aos="fade-up">
 
-      <h2 class="ms-4">All confession</h2>
+      <h1 class="ms-4">All confession</h1>
         <div id="content-container" class="content-container"></div>
       </div>
 

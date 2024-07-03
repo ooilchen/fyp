@@ -72,7 +72,7 @@
                                         </div>
                                         <div class="card-body">
                                             <form id="editProfileForm" method="POST" enctype="multipart/form-data">
-                                                <div class="form-group">
+                                                <!-- <div class="form-group">
                                                     <label for="profile_pic">Profile Picture</label>
                                                     <div class="mb-3">
                                                         <img src="<?php echo htmlspecialchars($user['profile_pic']); ?>" alt="Current Profile Picture" class="img-thumbnail" width="150" height="150">
@@ -81,7 +81,7 @@
                                                     <div class="input-group">
                                                         <input type="file" class="form-control" id="profile_pic" name="profile_pic" accept=".jpg, .jpeg, .png, .gif">
                                                     </div>
-                                                </div>
+                                                </div> -->
 
                                                 <div class="form-group">
                                                 <input type="hidden" name="userid" value="<?php echo htmlspecialchars($user['admin_id']); ?>">

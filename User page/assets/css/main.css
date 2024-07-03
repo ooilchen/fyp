@@ -1477,3 +1477,126 @@ input[type="submit"]:hover {
   text-decoration: none; 
 }
 
+/*--------------------------------------------------------------
+# Profile
+--------------------------------------------------------------*/
+
+.profile-section {
+  padding: 80px 0;
+}
+
+.profile-info {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-picture {
+  max-width: 200px;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.btn-upload {
+  font-size: 14px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-upload:hover {
+  background-color: #0056b3;
+}
+
+.file-input {
+  position: absolute;
+  font-size: 100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.post-container {
+  margin-top: 30px;
+}
+
+/*--------------------------------------------------------------
+# Liked post
+--------------------------------------------------------------*/
+
+.post {
+  border: 1px solid #ccc; 
+  border-radius: 10px; 
+  padding: 16px; 
+  margin-bottom: 20px; 
+  background-color: #fff; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
+}
+
+.post img {
+  width: 100%;
+  max-width: 150px; 
+  height: auto; 
+  border-radius: 10px; 
+  margin-bottom: 10px; 
+}
+
+.post p {
+  margin: 10px 0; 
+}
+
+.post small {
+  color: #666; 
+}
+
+
+
+.profile-picture {
+  width: 50%;
+  object-fit: cover;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper .btn-upload {
+  border: 2px solid #007bff;
+  color: #007bff;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+form.d-flex.flex-column.align-items-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+

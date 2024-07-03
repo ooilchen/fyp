@@ -8,7 +8,7 @@ if (isset($_GET['id'])) {
     $category_id = $_GET['id'];
 
     // Get the category name based on the category ID
-    $query = "SELECT category_name FROM category WHERE category_id = ? AND status = 1";
+    $query = "SELECT * FROM category WHERE category_id = ? AND status = 1";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $category_id);
     $stmt->execute();
@@ -17,6 +17,7 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         $category = $result->fetch_assoc();
         $category_name = $category['category_name'];
+        $category_desc = $category['category_desc'];
     } else {
         echo '<p>Invalid category ID or category not active</p>';
         exit;
@@ -68,7 +69,8 @@ if (isset($_GET['id'])) {
 
   <main id="main">
     <div data-aos="fade-up">
-      <h2 class="ms-4"><?php echo $category_name ?></h2>
+      <h1 class="ms-4"><?php echo $category_name ?></h1>
+      <h5 class="ms-4"><?php echo $category_desc ?></h5>
       <div id="content-container" class="content-container"></div>
     </div>
   </main>
