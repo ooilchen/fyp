@@ -102,7 +102,7 @@
 
                         <!-- Total confession Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <a href="Confess.all.php" style="text-decoration: none;">
+                            <a href="Confess_all.php" style="text-decoration: none;">
                                 <div class="card border-left-success shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">

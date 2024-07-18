@@ -162,7 +162,7 @@ session_start();
                             FROM content c
                             JOIN category cat ON c.category_id = cat.category_id
                             WHERE c.content_status = 1
-                            ORDER BY c.category_id DESC
+                            ORDER BY c.date_created DESC
                             LIMIT 6";
                     $result = $conn->query($sql);
 

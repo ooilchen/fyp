@@ -26,7 +26,7 @@
             <div id="error-message" class="text-danger"></div>
         </form>
         <div class="login-links">
-            <a href="/forgot-password">Forgot password?</a> | 
+            <!-- <a href="/forgot-password">Forgot password?</a> |  -->
             <a href="signup.php">Signup</a> |
             <a href="index.php">Homepage</a>
         </div>
