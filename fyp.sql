@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 25, 2024 at 06:29 AM
+-- Generation Time: Jul 28, 2024 at 02:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,15 +32,18 @@ CREATE TABLE `admin` (
   `admin_username` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `profile_pic` varchar(100) DEFAULT NULL
+  `approved` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`admin_id`, `admin_username`, `email`, `password`, `profile_pic`) VALUES
-('6673e7e9db3e4', 'ooilchen', 'leechen787@gmail.com', '$2y$10$yQ6UZY5rwTsuyhKqKQ5HG.cfCLNyuoO1gBh3eF4aw5AGw3wvC.Kbu', '../images/image_2024-06-18_22-51-49.png');
+INSERT INTO `admin` (`admin_id`, `admin_username`, `email`, `password`, `approved`) VALUES
+('6673e7e9db3e4', 'ooilchen', 'leechen787@gmail.com', '$2y$10$yQ6UZY5rwTsuyhKqKQ5HG.cfCLNyuoO1gBh3eF4aw5AGw3wvC.Kbu', 1),
+('66843ddf32753', 'bapu', 'bapu0523@gmail.com', '$2y$10$KDlwQN5KnZ5B1c5pVRSq7OJruk3fvQ47RUStMcOWvpFszJz.KQ2o6', 1),
+('6684470892f91', 'olc', 'olc6670@gmail.com', '$2y$10$BkhSidD3/5x4pED/pg9MSeWwg/hah4oqOI2r39gUvSjWCGnA4mm/6', 1),
+('6684e9d3ed838', NULL, '123@gmail.com', '$2y$10$JoreM.YIBtFvxl.yiUiFku4bZGADTxiOsz539GfkealHwoI8sZ1cC', 0);
 
 -- --------------------------------------------------------
 
@@ -52,7 +55,7 @@ CREATE TABLE `admin_annnouncement` (
   `announce_id` varchar(255) NOT NULL,
   `announcement` varchar(255) NOT NULL,
   `announcement_img` varchar(255) NOT NULL DEFAULT '../images/FB_IMG_1691993414822.jpg',
-  `date_announce` datetime NOT NULL
+  `date_announce` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -60,7 +63,7 @@ CREATE TABLE `admin_annnouncement` (
 --
 
 INSERT INTO `admin_annnouncement` (`announce_id`, `announcement`, `announcement_img`, `date_announce`) VALUES
-('INFO-0001', 'Testing 123', '../images/FB_IMG_1691993414822.jpg', '2024-05-01 11:33:22');
+('INFO-0001', 'Today the last of symposium! Gud luck everyone! ', '../imagesphoto_2024-07-03_17-39-22.jpg', '2024-07-03 17:39:27');
 
 -- --------------------------------------------------------
 
@@ -87,7 +90,8 @@ INSERT INTO `category` (`category_id`, `category_name`, `category_desc`, `status
 ('CAT-0005', 'promote', 'jual-jual your product, service, or promote your event', 1),
 ('CAT-0006', 'horror story', 'share your horror experience', 1),
 ('CAT-0007', 'crush', 'confess your love, mne tau jodoh XD', 1),
-('CAT-0008', 'study group', 'post anything related to studies, find your study buddies too', 1);
+('CAT-0008', 'study group', 'post anything related to studies, find your study buddies too', 1),
+('CAT-0009', 'room rental', 'look for room mate or house mate hereee', 1);
 
 -- --------------------------------------------------------
 
@@ -117,7 +121,8 @@ INSERT INTO `comments` (`comment_id`, `content_id`, `user_id`, `comment_text`, `
 ('COMMENT_6679351213816', 'conf-6676c53820f75', '667934e650d6c', 'Bapak kau ah', '2024-06-24 08:57:54'),
 ('COMMENT_6679352bd3305', 'conf-6676c46b7eeca', '667934e650d6c', 'bapak kau ah', '2024-06-24 08:58:19'),
 ('COMMENT_667935e6c99ae', 'conf-66793557db5f3', '667934e650d6c', 'Lurveeeeeeeeeeeeee', '2024-06-24 09:01:26'),
-('COMMENT_667a2e5027d78', 'conf-667706f123b66', '6675411188b63', 'Naissssssss', '2024-06-25 02:41:20');
+('COMMENT_667a2e5027d78', 'conf-667706f123b66', '6675411188b63', 'Naissssssss', '2024-06-25 02:41:20'),
+('COMMENT_668519e0f3c99', 'conf-6684eee41e706', '6675411188b63', 'Hiiii im interested at this! please contact me here, 011111111', '2024-07-03 09:29:04');
 
 -- --------------------------------------------------------
 
@@ -184,7 +189,14 @@ INSERT INTO `content` (`content_id`, `date_created`, `category_id`, `content`, `
 ('conf-6676c5b9a719f', '2024-06-22 12:38:17', 'CAT-0006', 'Hi... nak cerita sikit haritu penampakan lembaga hitam area tempat tunggu bas dkt cempaka... haritu hari Khamis, me and my friends tgh lepak malam2 dkt jeti, kitorg borak la pasal cerita hantu dkt unimas, ada satu cerita ni dia cerita dkt pulau yg dekat tasik tu, depan lakeview, pulau tu keras mmg dari dulu, sampai area sekeliling dia pun berhantu, kitorang habis lepak dlm pkl 3-4 pagi mcm tu... otw nak ke bus stop tu, perasan la ada someone tgh tunggu dkt bas, kalau dari jauh nampak hitam je, ntah la kalau benda tu nampak i sbb bila i stop bergerak dia berdiri, rasa takut bila dia berdiri tu Ya Allah, terus sejuk badan, dapat rasa degupan jantung, kaku terus... I lari je la terus masuk ke parking K8B cempaka, bila i pusing... benda tu terus hilang', 1, NULL, 1),
 ('conf-667706f123b66', '2024-06-22 17:16:33', 'CAT-0008', 'PLAYLIST SEASON WEEK STUDY :\r\nSabrina carpenter  \r\n1. Please  Please Please \r\n2. Espresso \r\n\r\nBillie elllish 🔛 🔝\r\n1. Bird of A feather\r\n2.Blue\r\n3.L\'AMOUR De Ma Vie \r\n\r\nNIKI (FAV)\r\n1. BACKBURNER \r\n2. Take A Chance With Me\r\n3.Lowkey\r\n\r\nDJO\r\n1.End the beginning \r\n\r\nSZA\r\n1. SATURN\r\n2.NOBODY GETS ME\r\n3. OPEN ARMS\r\n4. BLIND', 1, NULL, 3),
 ('conf-6679326da9779', '2024-06-24 08:46:37', 'CAT-0001', 'Saya nak graduate nanti. boleh g mampos semua org', 1, NULL, 2),
-('conf-66793557db5f3', '2024-06-24 08:59:03', 'CAT-0001', 'Hi, saya harini nak mengclarify, sy x penah buat confession dkt mana2 ok tu je', 1, NULL, 3);
+('conf-66793557db5f3', '2024-06-24 08:59:03', 'CAT-0001', 'Hi, saya harini nak mengclarify, sy x penah buat confession dkt mana2 ok tu je', 1, NULL, 3),
+('conf-6684eb906901c', '2024-07-03 06:11:28', 'CAT-0003', 'kalau dah isi application boleh cancel ke sbb salah pilih baru tahu laaa sakura tak da single room', 1, NULL, 0),
+('conf-6684ebdd3078e', '2024-07-03 06:12:45', 'CAT-0004', 'Hiii ada sesiapa jam tangan x? Dia Casio warna putih\r\n', 1, NULL, 0),
+('conf-6684ece68f77a', '2024-07-03 06:17:10', 'CAT-0004', 'Hi, ada tak sapa2 nampak laptop saya kat pavi? berwarna hitam acer. tolonggggggggggggggggggggggggggg', 1, NULL, 0),
+('conf-6684eee41e706', '2024-07-03 06:25:40', 'CAT-0009', 'Hii I am looking for roomatesss at unijaya. please pm meeee', 1, NULL, 1),
+('conf-6684f179b2981', '2024-07-03 06:36:41', 'CAT-0009', 'Hi we are looking for roomates. \r\nThe location is uni square. \r\nIncludes: Fridge, washing machine, dryer, wifi and air conditional. \r\nSingle room RM 300\r\n', 1, NULL, 1),
+('conf-6686035118443', '2024-07-04 02:05:05', 'CAT-0001', 'i love sticker', 1, NULL, 0),
+('conf-668615f505df1', '2024-07-04 03:24:37', 'CAT-0001', 'hiiiiiiiiiiiiiiiiiiii bodo', 0, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -202,7 +214,9 @@ CREATE TABLE `home_image` (
 --
 
 INSERT INTO `home_image` (`image_id`, `image_path`) VALUES
-('IMG-6673ecb8c58b7', '../images/IMG-6673ecb8c58b7.png');
+('IMG-668566627bac7', '../images/IMG-668566627bac7.jpg'),
+('IMG-6685666eb9c23', '../images/IMG-6685666eb9c23.png'),
+('IMG-66856696e89f1', '../images/IMG-66856696e89f1.jpg');
 
 -- --------------------------------------------------------
 
@@ -215,7 +229,7 @@ CREATE TABLE `user` (
   `username` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
-  `profile_pic` varchar(255) NOT NULL
+  `profile_pic` varchar(255) NOT NULL DEFAULT '../images/profile-icon-design-free-vector.jpg'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -223,10 +237,10 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `username`, `email`, `password`, `profile_pic`) VALUES
-('6675411188b63', 'ooilchen', 'leechen787@gmail.com', '$2y$10$7wr8qW8HUXCfZucMt9qgGOXe7PnwRLIx/f6eiDvni7//Ltuy5/ecq', ''),
-('6675bf7e246c9', 'ff', 'olc6670@gmail.com', '$2y$10$DUjOPOXPxwS7RZkt6aSFTO7VRaMNBlukSp/PFo9YqPUBVr0Ad7AiO', ''),
-('6675c09716d15', 'mango', 'wilsonxmango@gmail.com', '$2y$10$mVEyHwp08xXO2npQIcsKV.25nHkWekjK4PMZLkTMUIHvXDTnFPnm6', ''),
-('667934e650d6c', 'Is', 'Ismail@gmail.com', '$2y$10$BF3iWO.KGN5q2amBRfzvbe5yQ5HK4OdMvhNSKMD8RoCVslRsLdWta', '');
+('6675411188b63', 'ooilchen', 'leechen787@gmail.com', '$2y$10$7wr8qW8HUXCfZucMt9qgGOXe7PnwRLIx/f6eiDvni7//Ltuy5/ecq', '../images/IMG_0591.PNG'),
+('6675bf7e246c9', 'ff', 'olc6670@gmail.com', '$2y$10$DUjOPOXPxwS7RZkt6aSFTO7VRaMNBlukSp/PFo9YqPUBVr0Ad7AiO', '../images/profile-icon-design-free-vector.jpg	'),
+('6675c09716d15', 'mango', 'wilsonxmango@gmail.com', '$2y$10$mVEyHwp08xXO2npQIcsKV.25nHkWekjK4PMZLkTMUIHvXDTnFPnm6', '../images/profile-icon-design-free-vector.jpg	'),
+('667934e650d6c', 'Is', 'Ismail@gmail.com', '$2y$10$BF3iWO.KGN5q2amBRfzvbe5yQ5HK4OdMvhNSKMD8RoCVslRsLdWta', '../images/profile-icon-design-free-vector.jpg	');
 
 -- --------------------------------------------------------
 
@@ -264,6 +278,8 @@ INSERT INTO `user_likes` (`user_id`, `content_id`) VALUES
 ('6675411188b63', 'conf-667706f123b66'),
 ('6675411188b63', 'conf-6679326da9779'),
 ('6675411188b63', 'conf-66793557db5f3'),
+('6675411188b63', 'conf-6684eee41e706'),
+('6675411188b63', 'conf-6684f179b2981'),
 ('6675c09716d15', 'conf-6673ed0c36457'),
 ('6675c09716d15', 'conf-6673ed7009377'),
 ('6675c09716d15', 'conf-667436281506f'),
